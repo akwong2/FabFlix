@@ -41,20 +41,19 @@ public class MovieList extends HttpServlet {
 		
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql://moviedb?autoReconnect=true&useSSL=false";
+//		String loginUser = "root";
+//        String loginPasswd = "2228848";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
         response.setContentType("text/html");
         
         out.println("<HTML><HEAD><TITLE>MovieDB</TITLE></HEAD>");
-        out.println("<BODY><H1>Top 20 Rated Movies2</H1>");
+        out.println("<BODY style=\"background-color:powderblue\"><H1 style=\"color:blue\">Top 20 Rated Movies</H1>");
  
         try {
-        		out.println("<H3>ONE</H3>");
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
-	        out.println("<H2>TWO</H2>");
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
-	
 			Statement statement = dbcon.createStatement();
 			String query = "Select title,year,director,rating, group_concat(distinct stars.name), group_concat(distinct genres.name) "
 					+ "From movies, ratings, stars_in_movies, stars, genres, genres_in_movies "
@@ -66,7 +65,7 @@ public class MovieList extends HttpServlet {
 			ResultSet rs = statement.executeQuery(query);
 			
 			out.println("<TABLE border>");
-			out.println("<tr>"
+			out.println("<tr style=\"color:yellow\">"
 						+ "<th>Movie Number</th>"
 						+ "<th>Title</th>" 
 						+ "<th>Year</th>"
