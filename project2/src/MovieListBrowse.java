@@ -14,21 +14,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import org.apache.tomcat.jni.User;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class MovieListBrowse
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/MovieListBrowse")
+public class MovieListBrowse extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public MovieListBrowse() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,61 +39,56 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		PrintWriter out = response.getWriter();
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
-        //response.setContentType("text/html");
- 
-        try {
+		try {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
-
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 			Statement statement = dbcon.createStatement();
-			String email = request.getParameter("email");
-			String password = request.getParameter("password");
-			String query = "select firstName from customers\n" + 
-					"where customers.email = \"" + email + "\" and customers.password = \"" + password + "\"";
+			
+			String b = request.getParameter("id");
+
+			String query = "Select movies.id,title,year,director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n" + 
+					"From movies, stars_in_movies, stars, genres, genres_in_movies \n" + 
+					"Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id \n" + 
+					"and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id \n";
+			
+			if (b.length() == 1) { 
+				query = query + "and upper(movies.title) like upper('"+b+"%')\n";
+			} else {
+				query = query + "and genres.name = '"+b+"' \n";
+			}
+			
+			query = query + "group by movies.id,movies.title,movies.year,movies.director";
 
 			ResultSet rs = statement.executeQuery(query);
-
-			if (rs.next()) {
-				request.getSession().setAttribute("user", new User(email));
+			JsonArray jsonArray = new JsonArray();
+			
+			while (rs.next()) {
+				String id = rs.getString("movies.id");
+				String t = rs.getString("title");
+				String y = rs.getString("year");
+				String d = rs.getString("director");
+				String sN = rs.getString("group_concat(distinct stars.name)");
+				String gN = rs.getString("group_concat(distinct genres.name)");
 				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("status", "success");
-				responseJsonObject.addProperty("message", "success");
-				response.getWriter().write(responseJsonObject.toString());
-				
-				rs.close();
-		        statement.close();
-		        dbcon.close();
+				responseJsonObject.addProperty("id", id);
+				responseJsonObject.addProperty("title", t);
+				responseJsonObject.addProperty("year", y);
+				responseJsonObject.addProperty("director", d);
+				responseJsonObject.addProperty("starsName", sN);
+				responseJsonObject.addProperty("genresName", gN);
+				jsonArray.add(responseJsonObject);
 			}
-			else {
-				request.getSession().setAttribute("user", new User(email));
-				
-				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("status", "fail");
-				
-				responseJsonObject.addProperty("message", "Invalid Email or Password");
-				
-				response.getWriter().write(responseJsonObject.toString());
-				
-				rs.close();
-		        statement.close();
-		        dbcon.close();
-				
-			}
+			out.write(jsonArray.toString());
+			
+			rs.close();
+	        statement.close();
+	        dbcon.close();
         }
         catch (SQLException ex) {
             while (ex != null) {
@@ -109,7 +103,14 @@ public class Login extends HttpServlet {
             return;
         }
         out.close();
-	
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

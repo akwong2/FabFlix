@@ -1,0 +1,239 @@
+
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	padding-bottom: 200px;
+    background-color: #eee;
+  }
+
+.header-nightsky {
+    color: white;
+    background: url("../../assets/img/movie.jpg") no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    padding-bottom: 100px;
+    background-attachment:fixed
+}
+
+.header-nightsky .navbar-nav>li>a {
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.header-nightsky .navbar {
+    margin-bottom: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    border-bottom:none;
+    background-color: transparent;
+    min-width: 300px;
+    border: none;
+}
+
+.header-nightsky .navbar-default .navbar-nav>.open>a,
+.header-nightsky .navbar-default .navbar-nav>.open>a:focus,
+.header-nightsky .navbar-default .navbar-nav>.open>a:hover {
+    color: #ccc;
+    background-color: transparent;
+}
+
+.header-nightsky .nav>li>a:focus,
+.header-nightsky .nav>li>a:hover {
+    color: #ccc;
+    background-color: transparent;
+}
+
+.header-nightsky .navbar-nav>li {
+    margin-right: 20px;
+}
+
+.header-nightsky .navbar-nav {
+   margin-top: 12px;
+}
+
+.header-nightsky .navbar-toggle {
+    background-color: transparent !important;
+    margin-top: 20px;
+    border: 1px solid #fff;
+}
+
+.header-nightsky .navbar-toggle .icon-bar {
+    background-color: white;
+}
+
+.header-nightsky .navbar-brand {
+    color: white;
+    font-size: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.header-nightsky .navbar-brand:hover {
+    color: #ccc;
+}
+
+.header-nightsky .hero {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 100px;
+}
+
+.header-nightsky .hero h1 {
+	text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: 60px;
+    margin-bottom: 36px;
+}
+
+
+.header-nightsky .hero p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    max-width: 660px;
+    margin: 0 auto 20px;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+
+@media screen and (max-width: 767px) {
+
+    .header-nightsky .navbar-default .navbar-nav .open .dropdown-menu>li>a{
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .header-nightsky .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover{
+        color: #ccc;
+    }
+
+    .header-nightsky .navbar-collapse {
+        margin-left: 20px;
+        border-top: none;
+        box-shadow: none;
+    }
+
+    .header-nightsky .hero{
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .header-nightsky .hero h1{
+        font-size: 42px;
+    }
+}
+
+  .btn:focus
+  {
+   outline:0;
+   -webkit-outline:0;
+   -moz-outline:0;
+  }
+  .fullscreen_bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-image: url('http://cleancanvas.herokuapp.com/img/backgrounds/color-splash.jpg');
+    background-repeat:repeat;
+  }
+  
+  .header-nightsky .hero .browse .byTitle{
+  	position:absolute;
+  	left:0px;
+  	width: 50%;
+  }
+  
+    .header-nightsky .hero .browse .byGenre{
+  	position:absolute;
+  	right:0px;
+  	width: 50%;
+  }
+  
+  .header-nightsky .hero .browse .byTitle a{
+  	color:white;
+  	cursor:pointer;
+  }
+  
+  .header-nightsky .hero .browse .byGenre a{
+  	color:white;
+  	cursor:pointer;
+  }
+  
+  button.astext{
+  background:none;
+  border:none;
+  margin:0;
+  padding:0;  
+  }
+  
+  input[type=button]{
+  background:none;
+  border:none;
+  margin:0;
+  padding:0; 
+  cursor:pointer;
+  }
+  
+  input[type=button]:hover{
+  text-decoration:underline;
+  }
+  
+   .header-nightsky .hero .result{
+  	padding-top: 200px;
+  } 
+  
+   a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.next {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.round {
+    border-radius: 50%;
+}
+
+select{
+	padding-top:300px;
+	background-color:black;
+}
+
+th.but:hover{
+	text-decoration:underline;
+}
+
+a.thbut{
+	color:white;
+	padding: 0px 0px;
+}
+a.thbut:hover{
+	background-color: transparent;
+	text-decoration:underline;
+}
+  
+  
+  
+  
+  
+  
+  

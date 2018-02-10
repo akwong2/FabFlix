@@ -23,5 +23,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/Users/alvinkwong/Desktop/gson-2.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/alvinkwong/Desktop/junit-3.8.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

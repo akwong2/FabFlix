@@ -14,21 +14,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import org.apache.tomcat.jni.User;
-
 import com.google.gson.JsonObject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Confirm
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/Confirm")
+public class Confirm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public Confirm() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,63 +38,57 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		PrintWriter out = response.getWriter();
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
-        //response.setContentType("text/html");
- 
-        try {
-	        Class.forName("com.mysql.jdbc.Driver").newInstance();
-
+		String title = request.getParameter("title");
+		String quan = request.getParameter("quan");
+		int cID = Integer.parseInt(request.getParameter("id"));
+		System.out.println(title);
+		System.out.println(quan);
+		System.out.println(cID);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		LocalDate localdate = LocalDate.now();
+		System.out.println(dtf.format(localdate));
+		
+		
+		
+		try {
+	        
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 			Statement statement = dbcon.createStatement();
-			String email = request.getParameter("email");
-			String password = request.getParameter("password");
-			String query = "select firstName from customers\n" + 
-					"where customers.email = \"" + email + "\" and customers.password = \"" + password + "\"";
-
+			String query = "select movies.id from movies where movies.title='"+title+"'";
 			ResultSet rs = statement.executeQuery(query);
+			rs.next();
+			String mID = rs.getString("movies.id");
+				
+			String salesQuery = "INSERT INTO sales VALUES(DEFAULT,"+cID+",'"+mID+"', '"+dtf.format(localdate)+"')";
+			try {
+				statement.executeUpdate(salesQuery);
+				String IDquery = "select sales.id\n" + 
+						"from sales\n" + 
+						"where customerId = "+cID+" and movieId = '"+mID+"' and saleDate = '"+dtf.format(localdate)+"'";
+				ResultSet searchq = statement.executeQuery(IDquery);
+				if (searchq.next()) {
+					out.write("Transaction Number: " + searchq.getString("sales.id")+"\n");
+				}
+				out.write("Thank you for purchasing from FabFlix");
+				rs.close();
+		        statement.close();
+		        dbcon.close();
+			}
+			catch(SQLException ex){
+				while (ex != null) {
+	                System.out.println("SQL Exception:  " + ex.getMessage());
+	                ex = ex.getNextException();
+	            } // end while
+				
+			}
 
-			if (rs.next()) {
-				request.getSession().setAttribute("user", new User(email));
-				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("status", "success");
-				responseJsonObject.addProperty("message", "success");
-				response.getWriter().write(responseJsonObject.toString());
-				
-				rs.close();
-		        statement.close();
-		        dbcon.close();
-			}
-			else {
-				request.getSession().setAttribute("user", new User(email));
-				
-				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("status", "fail");
-				
-				responseJsonObject.addProperty("message", "Invalid Email or Password");
-				
-				response.getWriter().write(responseJsonObject.toString());
-				
-				rs.close();
-		        statement.close();
-		        dbcon.close();
-				
-			}
         }
         catch (SQLException ex) {
             while (ex != null) {
@@ -109,7 +103,16 @@ public class Login extends HttpServlet {
             return;
         }
         out.close();
-	
+
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
