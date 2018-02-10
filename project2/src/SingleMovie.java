@@ -40,6 +40,7 @@ public class SingleMovie extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		PrintWriter out = response.getWriter();
+		
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
 		
