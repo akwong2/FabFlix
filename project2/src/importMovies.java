@@ -176,7 +176,8 @@ public class importMovies {
 								}
 							}
 						}
-
+						
+						year = year.substring(0, 4);
 						if (year.equals("19yy")) {
 							year = "1900";
 						}
@@ -186,6 +187,8 @@ public class importMovies {
 						else if(year.equals("196x")) {
 							year = "1960";
 						}
+						
+						
 						ps.setString(1, id);
 						ps.setString(2, title);
 						ps.setInt(3, Integer.parseInt(year));
