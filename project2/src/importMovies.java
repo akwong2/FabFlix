@@ -85,7 +85,7 @@ public class importMovies {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
-	        String sql = "insert into movies (id, title,year,director) values (?,?,?,?)";
+	        String sql = "insert into moviedb.movies (id, title,year,director) values (?,?,?,?)";
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
 	        // directorfilms
@@ -179,9 +179,6 @@ public class importMovies {
 
 						if (year.equals("19yy")) {
 							year = "1900";
-						}
-						if (year.equals("19yy")) {
-							System.out.println("HERE");
 						}
 						ps.setString(1, id);
 						ps.setString(2, title);
