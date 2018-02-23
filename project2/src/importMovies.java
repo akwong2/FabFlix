@@ -96,6 +96,9 @@ public class importMovies {
 			ResultSet rsmovieid = statement.executeQuery(querymovieid);
 			rsmovieid.next();
 			String maxID = rsmovieid.getString("max(id)");
+			if (maxID.equals("NULL")) {
+				maxID = "aa0000000";
+			}
 	        
 			for (int i=0;i<nl.getLength();++i) {
 				
