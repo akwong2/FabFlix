@@ -186,15 +186,13 @@ public class importMovies {
 						else if(year.equals("196x")) {
 							year = "1960";
 						}
-						else if(year.equals("2001 ")) {
-							year = "2001";
-						}
 						else if(year.equals("198")) {
 							year = "1980";
 						}
 						else if(year.equals("196")) {
 							year = "1960";
 						}
+						year = year.substring(0, 4);
 				
 						
 						ps.setString(1, id);
