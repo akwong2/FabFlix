@@ -40,8 +40,8 @@ public class addMovie extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
@@ -177,37 +177,25 @@ public class addMovie extends HttpServlet {
 			JsonObject responseJsonObject = new JsonObject();
 
 			if (Integer.parseInt(rsA.getString("@a")) == 1) {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("a", "found");
 				responseJsonObject.addProperty("messageA", "Movie already in database");
-//				out.write(responseJsonObject.toString());
 			} else {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("a", "success");
 				responseJsonObject.addProperty("messageA", "Movie added!");
-//				out.write(responseJsonObject.toString());
 			}
 			if (Integer.parseInt(rsB.getString("@b")) == 1) {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("b", "found");
 				responseJsonObject.addProperty("messageB", "Star already in database");
-//				out.write(responseJsonObject.toString());
 			} else {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("b", "success");
 				responseJsonObject.addProperty("messageB", "Star added!");
-//				out.write(responseJsonObject.toString());
 			}
 			if (Integer.parseInt(rsC.getString("@c")) == 1) {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("c", "found");
 				responseJsonObject.addProperty("messageC", "Genre already in database");
-//				out.write(responseJsonObject.toString());
 			} else {
-//				JsonObject responseJsonObject = new JsonObject();
 				responseJsonObject.addProperty("c", "success");
 				responseJsonObject.addProperty("messageC", "Genre added!");
-//				out.write(responseJsonObject.toString());
 			}
 			out.write(responseJsonObject.toString());
 			rs.close();
