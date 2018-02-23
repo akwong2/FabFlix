@@ -107,37 +107,9 @@ public class importMovies {
 				NodeList filmList = films.getChildNodes();
 				// films
 				for (int k=0;k<filmList.getLength();++k) {
+//				for (int k=0;k<2;++k) {
 					// film
-					Node film = filmList.item(k);
-					NodeList filmInfo = film.getChildNodes();
 					Statement statement = dbcon.createStatement();
-					
-					String title = "NULL";
-					String year = "NULL";
-					
-					
-					if (film.getNodeName().equals("film")) {
-						ArrayList<String> cats = new ArrayList<String>();
-						
-						for (int l=0; l<filmInfo.getLength();++l) {
-							if (filmInfo.item(l).getNodeName().equals("t")) {
-								title = filmInfo.item(l).getTextContent();
-							}
-							if (filmInfo.item(l).getNodeName().equals("year")) {
-								if (!filmInfo.item(l).hasChildNodes()){
-									year = filmInfo.item(l).getTextContent();
-								} else {
-									year = filmInfo.item(l).getFirstChild().getTextContent();
-								}
-							}
-							if (filmInfo.item(l).getNodeName().equals("cats")) {
-								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
-									cats.add(filmInfo.item(l).getChildNodes().item(m).getTextContent());
-								}
-							}
-						}
-					}
-					
 					String querymovieid = "select max(id) from moviedb.movies";
 
 					ResultSet rsmovieid = statement.executeQuery(querymovieid);
@@ -171,22 +143,45 @@ public class importMovies {
 						}
 					}
 					
-					ps.setString(1, id);
-					ps.setString(2, title);
-					ps.setString(3, year);
-					ps.setString(4, dirName);
-					ps.addBatch();
 					
+					Node film = filmList.item(k);
+				
+					NodeList filmInfo = film.getChildNodes();
+					
+					if (film.getNodeName().equals("film")) {
+						String title = "NULL";
+						String year = "NULL";
+						ArrayList<String> cats = new ArrayList<String>();
+						
+						for (int l=0; l<filmInfo.getLength();++l) {
+							if (filmInfo.item(l).getNodeName().equals("t")) {
+								title = filmInfo.item(l).getTextContent();
+							}
+							if (filmInfo.item(l).getNodeName().equals("year")) {
+								if (!filmInfo.item(l).hasChildNodes()){
+									year = filmInfo.item(l).getTextContent();
+								} else {
+									year = filmInfo.item(l).getFirstChild().getTextContent();
+								}
+							}
+							if (filmInfo.item(l).getNodeName().equals("cats")) {
+								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
+									cats.add(filmInfo.item(l).getChildNodes().item(m).getTextContent());
+								}
+							}
+						}
+
+						ps.setString(1, id);
+						ps.setString(2, title);
+						ps.setInt(3, Integer.parseInt(year));
+						ps.setString(4, dirName);
+						ps.addBatch();
+						
+					}
 					rsmovieid.close();
 				}
 			}
-//			Statement statement = dbcon.createStatement();
-//			String query = "select email from employees";
-//			ResultSet rs = statement.executeQuery(query);
-//			if (rs.next()) {
-//				String email = rs.getString("email");
-//				System.out.println(email);
-//			}
+			System.out.println(ps);
 			ps.executeBatch();
         }
         catch (SQLException ex) {
@@ -197,7 +192,7 @@ public class importMovies {
         } // end catch SQLException
 
         catch (java.lang.Exception ex) {
-            System.out.println("Java Exception");
+            System.out.println("Java Exception: " +ex.getMessage());
             return;
         }
 		
