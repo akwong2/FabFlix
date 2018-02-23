@@ -183,17 +183,17 @@ public class importMovies {
 						if (year.equals("19yy")) {
 							System.out.println("HERE");
 						}
-//						ps.setString(1, id);
-//						ps.setString(2, title);
-//						ps.setInt(3, Integer.parseInt(year));
-//						ps.setString(4, dirName);
-//						ps.addBatch();
+						ps.setString(1, id);
+						ps.setString(2, title);
+						ps.setInt(3, Integer.parseInt(year));
+						ps.setString(4, dirName);
+						ps.addBatch();
 						
 					}
 					rsmovieid.close();
 				}
 			}
-//			ps.executeBatch();
+			ps.executeBatch();
         }
         catch (SQLException ex) {
             while (ex != null) {
