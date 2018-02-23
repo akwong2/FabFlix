@@ -73,11 +73,11 @@ public class importMovies {
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
-//		String loginUser = "root";
-//		String loginPasswd = "2228848";
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+//		String loginUser = "mytestuser";
+//		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
@@ -166,9 +166,9 @@ public class importMovies {
 								} else {
 									year = filmInfo.item(l).getFirstChild().getTextContent();
 								}
-								if (year.equals("19yy")) {
-									year = "1900";
-								}
+//								if (year.equals("19yy")) {
+//									year = "1900";
+//								}
 							}
 							if (filmInfo.item(l).getNodeName().equals("cats")) {
 								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
@@ -177,7 +177,6 @@ public class importMovies {
 							}
 						}
 						
-						year = year.substring(0, 4);
 						if (year.equals("19yy")) {
 							year = "1900";
 						}
@@ -187,19 +186,28 @@ public class importMovies {
 						else if(year.equals("196x")) {
 							year = "1960";
 						}
+						else if(year.equals("2001 ")) {
+							year = "2001";
+						}
+						else if(year.equals("198")) {
+							year = "1980";
+						}
+						else if(year.equals("196")) {
+							year = "1960";
+						}
+				
 						
-						
-						ps.setString(1, id);
-						ps.setString(2, title);
-						ps.setInt(3, Integer.parseInt(year));
-						ps.setString(4, dirName);
-						ps.addBatch();
+//						ps.setString(1, id);
+//						ps.setString(2, title);
+//						ps.setInt(3, Integer.parseInt(year));
+//						ps.setString(4, dirName);
+//						ps.addBatch();
 						
 					}
 					rsmovieid.close();
 				}
 			}
-			ps.executeBatch();
+//			ps.executeBatch();
         }
         catch (SQLException ex) {
             while (ex != null) {
