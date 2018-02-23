@@ -163,6 +163,9 @@ public class importMovies {
 								} else {
 									year = filmInfo.item(l).getFirstChild().getTextContent();
 								}
+								if (year.equals("19yy")) {
+									year = "1900";
+								}
 							}
 							if (filmInfo.item(l).getNodeName().equals("cats")) {
 								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
