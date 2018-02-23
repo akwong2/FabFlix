@@ -59,14 +59,15 @@ public class LoginFilter implements Filter {
 	
 	private boolean isUrlAllowedWithoutLogin(String requestURI) {
 //		requestURI = requestURI.toLowerCase();
-		
-		if (requestURI.endsWith("LoginRevised.jsp") || requestURI.endsWith("Login.js") 
-				|| requestURI.endsWith("Login") || requestURI.endsWith("LoginRevised.css")
-				|| requestURI.endsWith("movie.jpg"))
-		{
-			return true;
-		}
-		return false;
+		return true;
+//		if (requestURI.endsWith("LoginRevised.jsp") || requestURI.endsWith("Login.js") 
+//				|| requestURI.endsWith("Login") || requestURI.endsWith("LoginRevised.css")
+//				|| requestURI.endsWith("movie.jpg") || requestURI.endsWith("_dashboard.jsp")
+//				|| requestURI.endsWith("_dashboard.js") || requestURI.endsWith("EmployeeLogin"))
+//		{
+//			return true;
+//		}
+//		return false;
 	}
 
 	/**

@@ -14,20 +14,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class EmployeeLogin
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/EmployeeLogin")
+public class EmployeeLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public EmployeeLogin() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,8 +36,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -46,27 +44,25 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//doGet(request, response);
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		PrintWriter out = response.getWriter();
 		
-		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
-		// Verify CAPTCHA.
-		boolean valid = VerifyUtils.verify(gRecaptchaResponse);
-		if (!valid) {
-			
-			JsonObject responseJsonObject = new JsonObject();
-			responseJsonObject.addProperty("status", "fail");
-			
-			responseJsonObject.addProperty("message", "ReCaptcha Failed");
-			
-			response.getWriter().write(responseJsonObject.toString());
-			return;
-		}
+//		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+//		System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+//		// Verify CAPTCHA.
+//		boolean valid = VerifyUtils.verify(gRecaptchaResponse);
+//		if (!valid) {
+//			
+//			JsonObject responseJsonObject = new JsonObject();
+//			responseJsonObject.addProperty("status", "fail");
+//			
+//			responseJsonObject.addProperty("message", "ReCaptcha Failed");
+//			
+//			response.getWriter().write(responseJsonObject.toString());
+//			return;
+//		}
 		
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
@@ -79,8 +75,8 @@ public class Login extends HttpServlet {
 			Statement statement = dbcon.createStatement();
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
-			String query = "select firstName from customers\n" + 
-					"where customers.email = \"" + email + "\" and customers.password = \"" + password + "\"";
+			String query = "select fullname from employees\n" + 
+					"where employees.email = \"" + email + "\" and employees.password = \"" + password + "\"";
 
 			ResultSet rs = statement.executeQuery(query);
 
@@ -124,7 +120,6 @@ public class Login extends HttpServlet {
             return;
         }
         out.close();
-	
 	}
 
 }

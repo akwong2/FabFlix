@@ -18,16 +18,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class MovieListBrowse
+ * Servlet implementation class Insert
  */
-@WebServlet("/MovieListBrowse")
-public class MovieListBrowse extends HttpServlet {
+@WebServlet("/Insert")
+public class Insert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieListBrowse() {
+    public Insert() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,57 +37,88 @@ public class MovieListBrowse extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
 		PrintWriter out = response.getWriter();
 		String loginUser = "root";
 		String loginPasswd = "2228848";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
-		try {
+        try {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
+
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 			Statement statement = dbcon.createStatement();
-			
-			String b = request.getParameter("id");
-
-			String query = "Select movies.id,title,year,director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n" + 
-					"From movies, stars_in_movies, stars, genres, genres_in_movies \n" + 
-					"Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id \n" + 
-					"and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id \n";
-			
-			if (b.length() == 1) { 
-				query = query + "and upper(movies.title) like upper('"+b+"%')\n";
-			} else {
-				query = query + "and genres.name = '"+b+"' \n";
-			}
-			
-			query = query + "group by movies.id,movies.title,movies.year,movies.director";
+			Statement statement2 = dbcon.createStatement();
+			Statement statement3 = dbcon.createStatement();
+			String query = "select max(id) from moviedb.stars";
 
 			ResultSet rs = statement.executeQuery(query);
-			JsonArray jsonArray = new JsonArray();
 			
+//			System.out.println(rs.getString());
+//			JsonArray jsonArray = new JsonArray();
+//			
 			while (rs.next()) {
-				String id = rs.getString("movies.id");
-				String t = rs.getString("title");
-				String y = rs.getString("year");
-				String d = rs.getString("director");
-				String sN = rs.getString("group_concat(distinct stars.name)");
-				String gN = rs.getString("group_concat(distinct genres.name)");
-				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("id", id);
-				responseJsonObject.addProperty("title", t);
-				responseJsonObject.addProperty("year", y);
-				responseJsonObject.addProperty("director", d);
-				responseJsonObject.addProperty("starsName", sN);
-				responseJsonObject.addProperty("genresName", gN);
-				jsonArray.add(responseJsonObject);
+				String maxID = rs.getString("max(id)");
+				char first = maxID.charAt(0);
+				char second = maxID.charAt(1);
+				String numS = maxID.substring(2);
+				int num = Integer.parseInt(numS);
+				String id = "";
+				if ( Integer.parseInt(numS)+1 == 10000000) {
+					numS = "0000000";
+					if (second == 'z') {
+						if (first == 'z')
+							first = 'a';
+						else
+							first++;
+						second = 'a';
+					} else {
+						second++;
+					}
+					String firstS = String.valueOf(first);
+					String secondS = String.valueOf(second);
+					id += firstS + secondS + numS;
+					
+
+				} else {
+					
+					num = Integer.parseInt(numS) + 1;
+
+					String firstS = String.valueOf(first);
+					String secondS = String.valueOf(second);
+					id += firstS + secondS + String.format("%07d", num);
+					
+				}
+				String name = request.getParameter("name");
+				String birthYear = request.getParameter("year");
+				System.out.println(name);
+				System.out.println(birthYear);
+				String query2 = "select id from stars\n" + 
+						"where name = \"" + name + "\" and birthYear = " + birthYear + ";";
+				ResultSet rs2 = statement2.executeQuery(query2);
+				if (rs2.next()) {
+					JsonObject responseJsonObject = new JsonObject();
+					responseJsonObject.addProperty("status", "found");
+					responseJsonObject.addProperty("message", "Star already in database");
+					out.write(responseJsonObject.toString());
+				}
+				else {
+					String starInsert = "INSERT INTO stars VALUES('"+id+"','"+name+"',"+birthYear+")";
+					statement3.executeUpdate(starInsert);
+					JsonObject responseJsonObject = new JsonObject();
+					responseJsonObject.addProperty("status", "success");
+					responseJsonObject.addProperty("message", "Star added into database with id="
+							+ id +", name="+ name+", and birthYear=" + birthYear );
+					out.write(responseJsonObject.toString());
+					
+				}
+				
+				rs2.close();
 			}
-			out.write(jsonArray.toString());
-			
 			rs.close();
 	        statement.close();
+	        statement2.close();
+	        statement3.close();
 	        dbcon.close();
         }
         catch (SQLException ex) {

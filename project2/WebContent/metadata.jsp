@@ -3,48 +3,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Single Star</title>
+	<title>Metadata</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/Single.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/metadata.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-<body onload="submitId()">
-
+<body onload="display()">
 	<div class="header-nightsky">
         <nav class="navbar navbar-default">
             <div class="container">
-                <a class="navbar-brand" href="./Main.jsp">FabFlix</a>
-            		<div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="./Search.jsp">Search</a></li>
-                    		<li><a href="./Browse.jsp">Browse</a></li>
-                        <li><a href="./ShoppingCart.jsp">Checkout</a></li>
+                <a class="navbar-brand" href="./dashboard.jsp">FabFlix</a>
                         
-                       
-                        
-                    </ul>
-                </div>
                 
             </div>
         </nav>
         <div class="hero">
-        		<h1>Star</h1>
-	        <form id="getURL" method="get" action="#"> 
-				<input type="hidden" name="id" value="<%=request.getParameter("id")%>">
-			</form>
+        		<h1>Metadata</h1>
+
 			<div id = "result">
 				<table id=star_table class = "table table-inverse">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Date of Birth</th>
-							<th>Featured Movies</th>
+							<th>Table</th>
+							<th>Attribute and Types</th>
 						</tr>
 					</thead>
-					<tbody id=star_table_body>
+					<tbody id=table_body>
 					</tbody>
 				</table>
 			</div>			
@@ -55,7 +42,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- include our own JS file -->
-	<script src="./SingleStar.js"></script>
+	<script src="./metadata.js"></script>
 
 </body>
 </html>

@@ -3,29 +3,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Login</title>
+	<title>Insert</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/LoginRevised.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<div class="header-nightsky">
         <nav class="navbar navbar-default">
             <div class="container">
-                <a class="navbar-brand" href="./LoginRevised.jsp">FabFlix</a>
+                <a class="navbar-brand" href="./dashboard.jsp">FabFlix</a>
             </div>
         </nav>
 		<div class="hero">
-			<h1>Login</h1>
-			<form id="login_form" method="post" action="#">
-			    <input name= "email" type="text" class="form-control" placeholder="Email address" required="" autofocus="">
-				<input name= "password" type="password" class="form-control" placeholder="Password" required="">
-				<div align="center" class="g-recaptcha" data-sitekey="6LdcXUcUAAAAANLond8Mg6n1Pi73FmIpZ3DQodP3"></div>
+			<h1>Insert Star</h1>
+			<form id="insert_form" method="post" action="#">
+			    <input name= "name" type="text" class="form-control" placeholder="Name" required="" autofocus="">
+				<input name= "year" type="number" min="0" max="2018" step="1" class="form-control" required ="" placeholder="Birth Year">
 			    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">
-					Login
+					Insert Star
 				</button>
 			</form>
 		</div>
@@ -38,8 +36,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- include our own JS file -->
-	<script src="./Login.js"></script>
-    
+	<script src="./insert.js"></script>
 
 </body>
 </html>

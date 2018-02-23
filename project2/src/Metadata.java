@@ -18,16 +18,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class MovieListBrowse
+ * Servlet implementation class Metadata
  */
-@WebServlet("/MovieListBrowse")
-public class MovieListBrowse extends HttpServlet {
+@WebServlet("/Metadata")
+public class Metadata extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieListBrowse() {
+    public Metadata() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,55 +37,45 @@ public class MovieListBrowse extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
 		PrintWriter out = response.getWriter();
 		String loginUser = "root";
 		String loginPasswd = "2228848";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
-		try {
+        try {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
+
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 			Statement statement = dbcon.createStatement();
-			
-			String b = request.getParameter("id");
-
-			String query = "Select movies.id,title,year,director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n" + 
-					"From movies, stars_in_movies, stars, genres, genres_in_movies \n" + 
-					"Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id \n" + 
-					"and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id \n";
-			
-			if (b.length() == 1) { 
-				query = query + "and upper(movies.title) like upper('"+b+"%')\n";
-			} else {
-				query = query + "and genres.name = '"+b+"' \n";
-			}
-			
-			query = query + "group by movies.id,movies.title,movies.year,movies.director";
+			Statement statement2 = dbcon.createStatement();
+			String query = "show tables";
 
 			ResultSet rs = statement.executeQuery(query);
 			JsonArray jsonArray = new JsonArray();
 			
 			while (rs.next()) {
-				String id = rs.getString("movies.id");
-				String t = rs.getString("title");
-				String y = rs.getString("year");
-				String d = rs.getString("director");
-				String sN = rs.getString("group_concat(distinct stars.name)");
-				String gN = rs.getString("group_concat(distinct genres.name)");
+				String tables = rs.getString("Tables_in_moviedb");
+				String description = "describe " + tables;
+				ResultSet rsd = statement2.executeQuery(description);
+				
+				JsonArray attrArray = new JsonArray();
+				while (rsd.next()) {
+					String field = rsd.getString("Field");
+					String type = rsd.getString("Type");
+					JsonObject attrObject = new JsonObject();
+					attrObject.addProperty("field", field);
+					attrObject.addProperty("type", type);
+					attrArray.add(attrObject);
+				}
 				JsonObject responseJsonObject = new JsonObject();
-				responseJsonObject.addProperty("id", id);
-				responseJsonObject.addProperty("title", t);
-				responseJsonObject.addProperty("year", y);
-				responseJsonObject.addProperty("director", d);
-				responseJsonObject.addProperty("starsName", sN);
-				responseJsonObject.addProperty("genresName", gN);
+				responseJsonObject.addProperty("tables", tables);
+				responseJsonObject.add("attributes", attrArray);
+
 				jsonArray.add(responseJsonObject);
 			}
 			out.write(jsonArray.toString());
-			
+				
 			rs.close();
 	        statement.close();
 	        dbcon.close();

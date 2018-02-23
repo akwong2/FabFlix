@@ -25,5 +25,8 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="/Users/alvinkwong/Desktop/gson-2.8.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/alvinkwong/Desktop/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="/Users/alvinkwong/Desktop/lib/javax.json-1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/alvinkwong/Desktop/lib/recaptcha4j-0.0.7.jar"/>
+	<classpathentry kind="lib" path="/Users/alvinkwong/Desktop/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

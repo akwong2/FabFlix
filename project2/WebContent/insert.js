@@ -1,5 +1,5 @@
 
-function handleLoginResult(resultDataString) {
+function handleInsertResult(resultDataString) {
 	console.log(resultDataString);
 	resultDataJson = JSON.parse(resultDataString);
 //	resultDataJson = JSON.parse(JSON.stringify(resultDataString));
@@ -9,12 +9,12 @@ function handleLoginResult(resultDataString) {
 	console.log(resultDataJson["status"]);
 
 	if (resultDataJson["status"] == "success") {
-		window.location.replace("/project2/Main.jsp");
+		alert(resultDataJson["message"]);
 	} else {
 		console.log("show error message");
 		console.log(resultDataJson["message"]);
 		jQuery("#login_error_message").text(resultDataJson["message"]);
-		$("#login_form")[0].reset();
+		$("#insert_form")[0].reset();
 	}
 }
 
@@ -26,14 +26,13 @@ function submitLoginForm(formSubmitEvent) {
 	//   which will cause the page to refresh
 	//   see jQuery reference for details: https://api.jquery.com/submit/
 	formSubmitEvent.preventDefault();
-
 	jQuery.post(
-		"/project2/Login", 
+		"/project2/Insert", 
 		// serialize the login form to the data sent by POST request
-		jQuery("#login_form").serialize(),
-		(resultDataString) => handleLoginResult(resultDataString));
+		jQuery("#insert_form").serialize(),
+		(resultDataString) => handleInsertResult(resultDataString));
 
 }
 
 // bind the submit action of the form to a handler function
-jQuery("#login_form").submit((event) => submitLoginForm(event));
+jQuery("#insert_form").submit((event) => submitLoginForm(event));

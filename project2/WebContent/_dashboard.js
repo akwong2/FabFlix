@@ -9,7 +9,7 @@ function handleLoginResult(resultDataString) {
 	console.log(resultDataJson["status"]);
 
 	if (resultDataJson["status"] == "success") {
-		window.location.replace("/project2/Main.jsp");
+		window.location.replace("/project2/dashboard.jsp");
 	} else {
 		console.log("show error message");
 		console.log(resultDataJson["message"]);
@@ -26,9 +26,8 @@ function submitLoginForm(formSubmitEvent) {
 	//   which will cause the page to refresh
 	//   see jQuery reference for details: https://api.jquery.com/submit/
 	formSubmitEvent.preventDefault();
-
 	jQuery.post(
-		"/project2/Login", 
+		"/project2/EmployeeLogin", 
 		// serialize the login form to the data sent by POST request
 		jQuery("#login_form").serialize(),
 		(resultDataString) => handleLoginResult(resultDataString));

@@ -40,8 +40,8 @@ public class SingleStar extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		PrintWriter out = response.getWriter();
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         

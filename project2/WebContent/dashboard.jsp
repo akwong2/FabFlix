@@ -8,36 +8,28 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/LoginRevised.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-	<title>Main</title>
+	<title>Dashboard</title>
 </head>
 <body>
-
-    <div class="header-nightsky">
+	<div class="header-nightsky">
         <nav class="navbar navbar-default">
             <div class="container">
-                <a class="navbar-brand" href="./Main.jsp">FabFlix</a>
-            		<div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="./ShoppingCart.jsp">Checkout</a></li>
-                        
-                       
-                        
-                    </ul>
-                </div>
+                <a class="navbar-brand" href="./dashboard.jsp">FabFlix</a>
+            
             </div>
         </nav>
         <div class="hero">
             <h1>Welcome</h1>
             <p>Choose a selection</p>
-            <button id = "search" onclick = "searchFunction()" class="btn btn-primary">Search</button>
-            <button id = "browse" onclick = "browseFunction()" class="btn btn-primary">Browse</button>
+            <button id = "insert" onclick = "insertFunction()" class="btn btn-primary">Insert Star</button>
+            <button id = "metadata" onclick = "metadataFunction()" class="btn btn-primary">Metadata</button>
+            <button id = "movie" onclick = "movieFunction()" class="btn btn-primary">Add Movie</button>
         </div>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="./Main.js"></script>
-    
+    <script src="./dashboard.js"></script>
 
 </body>
 </html>
