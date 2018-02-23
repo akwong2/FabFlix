@@ -73,11 +73,11 @@ public class importMovies {
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+//		String loginUser = "root";
+//		String loginPasswd = "2228848";
 		
-//		String loginUser = "mytestuser";
-//		String loginPasswd = "mypassword";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
@@ -197,17 +197,17 @@ public class importMovies {
 						}
 				
 						
-//						ps.setString(1, id);
-//						ps.setString(2, title);
-//						ps.setInt(3, Integer.parseInt(year));
-//						ps.setString(4, dirName);
-//						ps.addBatch();
+						ps.setString(1, id);
+						ps.setString(2, title);
+						ps.setInt(3, Integer.parseInt(year));
+						ps.setString(4, dirName);
+						ps.addBatch();
 						
 					}
 					rsmovieid.close();
 				}
 			}
-//			ps.executeBatch();
+			ps.executeBatch();
         }
         catch (SQLException ex) {
             while (ex != null) {
