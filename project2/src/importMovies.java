@@ -89,6 +89,14 @@ public class importMovies {
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
 	        // directorfilms
+	        
+	        Statement statement = dbcon.createStatement();
+			String querymovieid = "select max(id) from moviedb.movies";
+
+			ResultSet rsmovieid = statement.executeQuery(querymovieid);
+			rsmovieid.next();
+			String maxID = rsmovieid.getString("max(id)");
+	        
 			for (int i=0;i<nl.getLength();++i) {
 				
 				Element e = (Element)nl.item(i);
@@ -107,12 +115,37 @@ public class importMovies {
 					
 				}
 				
+				
 				NodeList filmList = films.getChildNodes();
 				// films
 				for (int k=0;k<filmList.getLength();++k) {
-//				for (int k=0;k<2;++k) {
 					// film
+					String id = "";
+					char first = maxID.charAt(0);
+					char second = maxID.charAt(1);
+					String numS = maxID.substring(2);
+					int num = Integer.parseInt(numS);
 					
+					if ( Integer.parseInt(numS)+1 == 10000000) {
+						numS = "0000000";
+						if (second == 'z') {
+							if (first == 'z')
+								first = 'a';
+							else
+								first++;
+							second = 'a';
+						} else {
+							second++;
+						}
+						String firstS = String.valueOf(first);
+						String secondS = String.valueOf(second);
+						id += firstS + secondS + numS;
+					} else {
+						num = Integer.parseInt(numS) + 1;
+						String firstS = String.valueOf(first);
+						String secondS = String.valueOf(second);
+						id += firstS + secondS + String.format("%07d", num);
+					}
 					
 					
 					Node film = filmList.item(k);
@@ -134,9 +167,7 @@ public class importMovies {
 								} else {
 									year = filmInfo.item(l).getFirstChild().getTextContent();
 								}
-//								if (year.equals("19yy")) {
-//									year = "1900";
-//								}
+
 							}
 							if (filmInfo.item(l).getNodeName().equals("cats")) {
 								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
@@ -161,48 +192,17 @@ public class importMovies {
 							year = "1960";
 						}
 						year = year.substring(0, 4);
-						
-						Statement statement = dbcon.createStatement();
-						String querymovieid = "select max(id) from moviedb.movies";
-
-						ResultSet rsmovieid = statement.executeQuery(querymovieid);
-						String id = "";
-						while (rsmovieid.next()) {
-							String maxID = rsmovieid.getString("max(id)");
-							char first = maxID.charAt(0);
-							char second = maxID.charAt(1);
-							String numS = maxID.substring(2);
-							int num = Integer.parseInt(numS);
-							
-							if ( Integer.parseInt(numS)+1 == 10000000) {
-								numS = "0000000";
-								if (second == 'z') {
-									if (first == 'z')
-										first = 'a';
-									else
-										first++;
-									second = 'a';
-								} else {
-									second++;
-								}
-								String firstS = String.valueOf(first);
-								String secondS = String.valueOf(second);
-								id += firstS + secondS + numS;
-							} else {
-								num = Integer.parseInt(numS) + 1;
-								String firstS = String.valueOf(first);
-								String secondS = String.valueOf(second);
-								id += firstS + secondS + String.format("%07d", num);
-							}
-						}
+				
 						
 						ps.setString(1, id);
 						ps.setString(2, title);
 						ps.setInt(3, Integer.parseInt(year));
 						ps.setString(4, dirName);
 						ps.addBatch();
-						rsmovieid.close();
+						maxID = id;
+						
 					}
+					rsmovieid.close();
 				}
 			}
 			ps.executeBatch();
