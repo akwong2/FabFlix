@@ -73,6 +73,9 @@ public class importMovies {
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
+//		String loginUser = "root";
+//		String loginPasswd = "2228848";
+		
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
 		
@@ -174,18 +177,23 @@ public class importMovies {
 							}
 						}
 
-						ps.setString(1, id);
-						ps.setString(2, title);
-						ps.setInt(3, Integer.parseInt(year));
-						ps.setString(4, dirName);
-						ps.addBatch();
+						if (year.equals("19yy")) {
+							year = "1900";
+						}
+						if (year.equals("19yy")) {
+							System.out.println("HERE");
+						}
+//						ps.setString(1, id);
+//						ps.setString(2, title);
+//						ps.setInt(3, Integer.parseInt(year));
+//						ps.setString(4, dirName);
+//						ps.addBatch();
 						
 					}
 					rsmovieid.close();
 				}
 			}
-			System.out.println(ps);
-			ps.executeBatch();
+//			ps.executeBatch();
         }
         catch (SQLException ex) {
             while (ex != null) {
