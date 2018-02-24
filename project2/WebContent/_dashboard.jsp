@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="assets/css/LoginRevised.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<div class="header-nightsky">
@@ -22,6 +23,7 @@
 			<form id="login_form" method="post" action="#">
 			    <input name= "email" type="text" class="form-control" placeholder="Email address" required="" autofocus="">
 				<input name= "password" type="password" class="form-control" placeholder="Password" required="">
+				<div align="center" class="g-recaptcha" data-sitekey="6LdcXUcUAAAAANLond8Mg6n1Pi73FmIpZ3DQodP3"></div>
 			    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">
 					Login
 				</button>

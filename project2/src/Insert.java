@@ -38,8 +38,10 @@ public class Insert extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+//		String loginUser = "root";
+//		String loginPasswd = "2228848";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
