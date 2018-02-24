@@ -251,8 +251,8 @@ public class importMovies {
 			}
 			
 			
-			psGenres_in_Movies.executeBatch();
 			ps.executeBatch();
+			psGenres_in_Movies.executeBatch();
 			statement.close();
 			psGenres_in_Movies.close();
 			ps.close();
