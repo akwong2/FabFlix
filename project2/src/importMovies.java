@@ -91,7 +91,7 @@ public class importMovies {
 	        String sqlGenres_in_Movies = "insert into moviedb.genres_in_movies (genreId, movieId) values (?,?)";
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
-	        PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
+	        //PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
 	        PreparedStatement psGenres_in_Movies = dbcon.prepareStatement(sqlGenres_in_Movies);
 	        // directorfilms
 	        
@@ -213,6 +213,7 @@ public class importMovies {
 						year = year.substring(0, 4);
 				
 						for (String cat : cats) {
+							PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
 							Statement statementGenreExist = dbcon.createStatement();
 							String queryGenreExist = "select id from genres where name = '"+cat+"';";
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
@@ -229,9 +230,10 @@ public class importMovies {
 //								psGenres_in_Movies.setString(2, id);
 							}
 							//psGenres_in_Movies.addBatch();
+							psGenres.executeBatch();
 						}
 						
-						psGenres.executeBatch();
+						//psGenres.executeBatch();
 //						psGenres_in_Movies.executeBatch();
 						
 						ps.setString(1, id);
