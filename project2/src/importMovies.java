@@ -230,7 +230,6 @@ public class importMovies {
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
 								
-								System.out.println(rsGenreExist.getString("id"));
 							} else {
 								//System.out.println(rsGenreExist.getString("id"));
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
