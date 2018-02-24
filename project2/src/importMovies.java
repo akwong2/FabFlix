@@ -187,15 +187,14 @@ public class importMovies {
 								} else {
 									year = filmInfo.item(l).getFirstChild().getTextContent();
 								}
-
 							}
 							if (filmInfo.item(l).getNodeName().equals("cats")) {
 								for (int m=0; m<filmInfo.item(l).getChildNodes().getLength();++m) {
-									cats.add(filmInfo.item(l).getChildNodes().item(m).getTextContent());
+									if (filmInfo.item(l).getChildNodes().item(m).getNodeName().equals("cat"))
+										cats.add(filmInfo.item(l).getChildNodes().item(m).getTextContent());
 								}
 							}
 						}
-						
 						if (year.equals("19yy")) {
 							year = "1900";
 						}
