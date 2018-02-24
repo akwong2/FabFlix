@@ -121,7 +121,7 @@ public class importMovies {
 	        			if (actorInfo.item(b).getNodeName().equals("stagename")) {
 	        				stagename = actorInfo.item(b).getTextContent();
 	        				stagename = stagename.replaceAll("\"", "'");
-	        				stagename = stagename.replaceAll("\\", "/");
+	        				stagename = stagename.replaceAll("\\", "");
 	        			}
 	        			if (actorInfo.item(b).getNodeName().equals("dob")) {
 	        				if (!actorInfo.item(b).getTextContent().isEmpty()) {
