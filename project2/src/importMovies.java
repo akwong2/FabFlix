@@ -107,7 +107,8 @@ public class importMovies {
 	        String sqlstar = "insert into moviedb.stars (id, name, birthYear) values (?,?,?)";
 	        PreparedStatement psstar = dbcon.prepareStatement(sqlstar);
 	        
-	        for (int a = 0; a < nl2.getLength();++a) {
+//	        for (int a = 0; a < nl2.getLength();++a) {
+	        for (int a = 0; a < 50;++a) {
 	        		NodeList actorInfo = nl2.item(a).getChildNodes();
 	        		
 	        		String sid = "";
@@ -133,7 +134,7 @@ public class importMovies {
 	        			}
 	        			
 	        			Statement statementStarExist = dbcon.createStatement();
-	        	        String querystarExist = "select id from stars where name = \""+stagename+"\";";
+	        	        String querystarExist = "select id from moviedb.stars where name = \""+stagename+"\";";
 	        	        ResultSet rsstarExist = statementStarExist.executeQuery(querystarExist);
 	        	        if (!rsstarExist.next()) {
 	    					char first = maxIDstar.charAt(0);
@@ -175,11 +176,12 @@ public class importMovies {
 	        	        rsstarExist.close();
 	        		}
 	        		
+	        		System.out.println(psstar);
 //	        		System.out.println(sid);
 //	        		System.out.println(stagename);
 //	        		System.out.println(dob);
 	        }
-	        psstar.executeBatch();
+	        //psstar.executeBatch();
 			psstar.close();
 			statementStarId.close();
 			rsstarid.close();
