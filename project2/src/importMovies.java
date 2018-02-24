@@ -124,7 +124,7 @@ public class importMovies {
 	        						if (movieInfo.item(f).getChildNodes().item(g).getNodeName().equals("a")){
 	        							if (!movieInfo.item(f).getChildNodes().item(g).getTextContent().equals("s a"))
 	        								
-	        								list.add(movieInfo.item(f).getChildNodes().item(g).getTextContent().replaceAll("\"", "'"));
+	        								list.add(movieInfo.item(f).getChildNodes().item(g).getTextContent().replaceAll("\"", "'").replaceAll("\\\\", "/"));
 	        						}
 	        					}
 	        					starMoviesMap.put(movieName, list);
