@@ -28,6 +28,7 @@ public class importMovies {
 //	List myEmpls;
 	Document dom;
 	Document dom2;
+	Document dom3;
 
 
 	public importMovies(){
@@ -47,16 +48,16 @@ public class importMovies {
 	
 	private void parseXmlFile(){
 		//get the factory
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();	
 		DocumentBuilderFactory dbf2 = DocumentBuilderFactory.newInstance();
+		DocumentBuilderFactory dbf3 = DocumentBuilderFactory.newInstance();
 		
 		
 		try {
 			
 			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			DocumentBuilder db2 = dbf.newDocumentBuilder();
+			DocumentBuilder db2 = dbf2.newDocumentBuilder();
 			
 			//parse using builder to get DOM representation of the XML file
 			dom = db.parse("mains243.xml");
@@ -82,6 +83,7 @@ public class importMovies {
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
 		NodeList nl2 = docEle2.getElementsByTagName("actor");		
+		
 //		String loginUser = "root";
 //		String loginPasswd = "2228848";
 		
@@ -166,6 +168,7 @@ public class importMovies {
 	        	        rsstarExist.close();
 	        		}
 	        		maxIDstar = sid;
+
 	        		psstar.setString(1, sid);
 				psstar.setString(2, stagename);
 				if (dob.equals("NULL")) {
@@ -174,6 +177,7 @@ public class importMovies {
 					psstar.setInt(3, Integer.parseInt(dob));
 				}
 				psstar.addBatch();
+
 	        		
 	        		
 	        		System.out.println(psstar);
@@ -364,6 +368,7 @@ public class importMovies {
         } // end catch SQLException
 
         catch (java.lang.Exception ex) {
+        		System.out.println(ex.getStackTrace()[0].getLineNumber());
             System.out.println("Java Exception: " +ex.getMessage());
             return;
         }
