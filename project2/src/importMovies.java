@@ -112,7 +112,7 @@ public class importMovies {
 			int maxIDGenres;
 			
 			if (maxIDGenresStr == null) {
-				maxIDGenres = 1;
+				maxIDGenres = 0;
 			} else {
 				maxIDGenres = Integer.parseInt(maxIDGenresStr);
 			}
@@ -219,17 +219,16 @@ public class importMovies {
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
 							if (!rsGenreExist.next()) {
 								System.out.println(psGenres);
+								++maxIDGenres;
 								gmap.put(maxIDGenres, cat);
 								psGenres.setInt(1, maxIDGenres);
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
-								
+								psGenres.executeBatch();
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
 								
 								System.out.println(rsGenreExist.getString("id"));
-								++maxIDGenres;
-								psGenres.executeBatch();
 							} else {
 								//System.out.println(rsGenreExist.getString("id"));
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
