@@ -73,11 +73,11 @@ public class importMovies {
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
-//		String loginUser = "root";
-//		String loginPasswd = "2228848";
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+//		String loginUser = "mytestuser";
+//		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
@@ -86,18 +86,34 @@ public class importMovies {
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 	        String sql = "insert into moviedb.movies (id, title,year,director) values (?,?,?,?)";
+	        String sqlGenres = "insert into moviedb.genres (id, name) values (?,?)";
+	        String sqlGenres_in_Movies = "insert into moviedb.genres (id, name) values (?,?)";
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
+	        PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
+	        PreparedStatement psGenres_in_Movies = dbcon.prepareStatement(sqlGenres_in_Movies);
 	        // directorfilms
 	        
 	        Statement statement = dbcon.createStatement();
+	        Statement statementGenres = dbcon.createStatement();
 			String querymovieid = "select max(id) from moviedb.movies";
+			String querygenresid = "select max(id) from moviedb.genres";
 
 			ResultSet rsmovieid = statement.executeQuery(querymovieid);
 			rsmovieid.next();
 			String maxID = rsmovieid.getString("max(id)");
 			if (maxID == null) {
 				maxID = "aa0000000";
+			}
+			ResultSet rsgenresid = statementGenres.executeQuery(querygenresid);
+			rsgenresid.next();
+			String maxIDGenresStr = rsgenresid.getString("max(id)");
+			int maxIDGenres;
+			
+			if (maxIDGenresStr == null) {
+				maxIDGenres = 1;
+			} else {
+				maxIDGenres = Integer.parseInt(maxIDGenresStr);
 			}
 	        
 			for (int i=0;i<nl.getLength();++i) {
@@ -115,10 +131,7 @@ public class importMovies {
 					}else if (dir.getChildNodes().item(j).getNodeName().equals("dirn")) {
 						dirName = dir.getChildNodes().item(j).getTextContent();
 					}
-					
 				}
-				
-				
 				NodeList filmList = films.getChildNodes();
 				// films
 				for (int k=0;k<filmList.getLength();++k) {
@@ -149,7 +162,6 @@ public class importMovies {
 						String secondS = String.valueOf(second);
 						id += firstS + secondS + String.format("%07d", num);
 					}
-					
 					
 					Node film = filmList.item(k);
 				
@@ -196,6 +208,27 @@ public class importMovies {
 						}
 						year = year.substring(0, 4);
 				
+						for (String cat : cats) {
+							Statement statementGenreExist = dbcon.createStatement();
+							String queryGenreExist = "select id from genres where name = '"+cat+"';";
+							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
+							if (!rsGenreExist.next()) {
+								psGenres.setInt(1, maxIDGenres);
+								psGenres.setString(2, cat);
+								psGenres.addBatch();
+								psGenres_in_Movies.setInt(1, maxIDGenres);
+								psGenres_in_Movies.setString(2, cat);
+								
+								++maxIDGenres;
+							} else {
+								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
+								psGenres_in_Movies.setString(2, cat);
+							}
+							psGenres_in_Movies.addBatch();
+						}
+						
+						psGenres.executeBatch();
+						psGenres_in_Movies.executeBatch();
 						
 						ps.setString(1, id);
 						ps.setString(2, title);
