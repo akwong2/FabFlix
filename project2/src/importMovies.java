@@ -120,8 +120,13 @@ public class importMovies {
 	        				stagename = actorInfo.item(b).getTextContent();
 	        			}
 	        			if (actorInfo.item(b).getNodeName().equals("dob")) {
-	        				if (!actorInfo.item(b).getTextContent().isEmpty()) 
-	        					dob = actorInfo.item(b).getTextContent();
+	        				if (!actorInfo.item(b).getTextContent().isEmpty()) {
+	        					if (actorInfo.item(b).getTextContent().equals("n.a.")) {
+	        						dob = "NULL";
+	        					}else {
+	        						dob = actorInfo.item(b).getTextContent();
+	        					}		
+	        				}
 	        			}
 	        			
 	        			Statement statementStarExist = dbcon.createStatement();
