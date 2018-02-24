@@ -162,13 +162,11 @@ public class importMovies {
 	    						String secondS = String.valueOf(second);
 	    						sid = firstS + secondS + String.format("%07d", num);
 	    					}
-	    					maxIDstar = sid;
-	    					
 	        	        }
 	        	        statementStarExist.close();
 	        	        rsstarExist.close();
 	        		}
-	        		
+	        		maxIDstar = sid;
 	        		psstar.setString(1, sid);
 				psstar.setString(2, stagename);
 				if (dob.equals("NULL")) {
