@@ -181,7 +181,7 @@ public class importMovies {
 //	        		System.out.println(stagename);
 //	        		System.out.println(dob);
 	        }
-	        //psstar.executeBatch();
+	        psstar.executeBatch();
 			psstar.close();
 			statementStarId.close();
 			rsstarid.close();
