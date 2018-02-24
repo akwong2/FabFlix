@@ -167,15 +167,14 @@ public class importMovies {
 	        	        rsstarExist.close();
 	        		}
 	        		
-	        		psstar.executeBatch();
-	        		psstar.close();
-	        		statementStarId.close();
-	        		rsstarid.close();
-	        		
 //	        		System.out.println(sid);
 //	        		System.out.println(stagename);
 //	        		System.out.println(dob);
 	        }
+	        psstar.executeBatch();
+			psstar.close();
+			statementStarId.close();
+			rsstarid.close();
     	        
 	        String sql = "insert into moviedb.movies (id, title,year,director) values (?,?,?,?)";
 	        String sqlGenres = "insert into moviedb.genres (id, name) values (?,?)";
