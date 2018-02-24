@@ -82,11 +82,11 @@ public class importMovies {
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
 		NodeList nl2 = docEle2.getElementsByTagName("actor");		
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+//		String loginUser = "root";
+//		String loginPasswd = "2228848";
 		
-//		String loginUser = "mytestuser";
-//		String loginPasswd = "mypassword";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
