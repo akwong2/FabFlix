@@ -107,8 +107,7 @@ public class importMovies {
 	        String sqlstar = "insert into moviedb.stars (id, name, birthYear) values (?,?,?)";
 	        PreparedStatement psstar = dbcon.prepareStatement(sqlstar);
 	        
-//	        for (int a = 0; a < nl2.getLength();++a) {
-	        for (int a = 0; a < 50;++a) {
+	        for (int a = 0; a < nl2.getLength();++a) {
 	        		NodeList actorInfo = nl2.item(a).getChildNodes();
 	        		
 	        		String sid = "";
