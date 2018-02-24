@@ -224,6 +224,7 @@ public class importMovies {
 								++maxIDGenres;
 								gmap.put(maxIDGenres, cat);
 								psGenres.setInt(1, maxIDGenres);
+								cat = cat.replaceFirst("^\\s*", "");
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
 								psGenres.executeBatch();
