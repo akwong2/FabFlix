@@ -225,8 +225,8 @@ public class importMovies {
 								gmap.put(maxIDGenres, cat);
 								psGenres.setInt(1, maxIDGenres);
 								psGenres.setString(2, cat);
-//								psGenres.addBatch();
-//								psGenres.executeBatch();
+								psGenres.addBatch();
+								psGenres.executeBatch();
 							}
 							
 							psGenres.close();
