@@ -249,7 +249,7 @@ public class importMovies {
 					rsgenresid.close();
 				}
 			}
-			//ps.executeBatch();
+			ps.executeBatch();
 			
 //			PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
 //			
