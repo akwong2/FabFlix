@@ -163,18 +163,21 @@ public class importMovies {
 	    						sid = firstS + secondS + String.format("%07d", num);
 	    					}
 	    					maxIDstar = sid;
-	    					psstar.setString(1, sid);
-	    					psstar.setString(2, stagename);
-	    					if (dob.equals("NULL")) {
-	    						psstar.setNull(3, 0);
-	    					}else {
-	    						psstar.setInt(3, Integer.parseInt(dob));
-	    					}
-	    					psstar.addBatch();
+	    					
 	        	        }
 	        	        statementStarExist.close();
 	        	        rsstarExist.close();
 	        		}
+	        		
+	        		psstar.setString(1, sid);
+				psstar.setString(2, stagename);
+				if (dob.equals("NULL")) {
+					psstar.setNull(3, 0);
+				}else {
+					psstar.setInt(3, Integer.parseInt(dob));
+				}
+				psstar.addBatch();
+	        		
 	        		
 	        		System.out.println(psstar);
 //	        		System.out.println(sid);
