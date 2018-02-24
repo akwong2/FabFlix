@@ -116,6 +116,8 @@ public class importMovies {
 				maxIDGenres = Integer.parseInt(maxIDGenresStr);
 			}
 	        
+			
+			
 			for (int i=0;i<nl.getLength();++i) {
 				
 				Element e = (Element)nl.item(i);
@@ -228,7 +230,7 @@ public class importMovies {
 						}
 						
 						psGenres.executeBatch();
-						psGenres_in_Movies.executeBatch();
+//						psGenres_in_Movies.executeBatch();
 						
 						ps.setString(1, id);
 						ps.setString(2, title);
@@ -242,6 +244,9 @@ public class importMovies {
 				}
 			}
 			ps.executeBatch();
+			psGenres_in_Movies.executeBatch();
+			
+			
         }
         catch (SQLException ex) {
             while (ex != null) {
