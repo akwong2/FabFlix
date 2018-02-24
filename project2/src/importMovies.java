@@ -123,7 +123,8 @@ public class importMovies {
 	        						}
 	        						if (movieInfo.item(f).getChildNodes().item(g).getNodeName().equals("a")){
 	        							if (!movieInfo.item(f).getChildNodes().item(g).getTextContent().equals("s a"))
-	        								list.add(movieInfo.item(f).getChildNodes().item(g).getTextContent());
+	        								
+	        								list.add(movieInfo.item(f).getChildNodes().item(g).getTextContent().replaceAll("\"", "'"));
 	        						}
 	        					}
 	        					starMoviesMap.put(movieName, list);
@@ -132,40 +133,7 @@ public class importMovies {
 	        		}
 	        }
 	        
-	        
-//	        String sqlsinm = "insert into moviedb.stars_in_movies (starId,movieId ) values (?,?)";
-//	        PreparedStatement sinm = dbcon.prepareStatement(sqlsinm);
-//	        
-//	        for (String key : starMoviesMap.keySet()) {
-//        		ArrayList<String> value = starMoviesMap.get(key);
-//
-//	        		for (String star: value) {
-//	        			String starid2 = "NULL";
-//	        			
-//	        			Statement starStatement = dbcon.createStatement();
-//	            		String querystar = "select id from moviedb.stars where name = '" +star+ "';";
-//	            		ResultSet rsquerystar = starStatement.executeQuery(querystar);
-//	            		
-//	            		Statement querymoviestatement = dbcon.createStatement();
-//	            		String querymovie = "select id from moviedb.movies where title = '"+key+"';";
-//	            		ResultSet rsquerymovie = querymoviestatement.executeQuery(querymovie);
-//	            		
-//	            		if (rsquerystar.next() && rsquerymovie.next()) {
-//	            			String qs = rsquerystar.getString("id");
-//	            			String qm = rsquerymovie.getString("id");
-//	            			sinm.setString(1, qs);
-//	            			sinm.setString(2, qm);
-//	            			sinm.addBatch();
-//	            		}
-//	            		
-//	            		starStatement.close();
-//	            		rsquerystar.close();
-//	            		querymoviestatement.close();
-//	            		rsquerymovie.close();
-//	        		}
-//	        }
-//	        sinm.executeBatch();
-//	        sinm.close();
+	       
 	       
 	        Statement statementStarId = dbcon.createStatement();
 	        String querystarid = "select max(id) from moviedb.stars";
