@@ -74,11 +74,11 @@ public class importMovies {
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
-//		String loginUser = "root";
-//		String loginPasswd = "2228848";
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+//		String loginUser = "mytestuser";
+//		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
@@ -219,14 +219,18 @@ public class importMovies {
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
 							if (!rsGenreExist.next()) {
 								gmap.put(maxIDGenres, cat);
-//								psGenres.setInt(1, maxIDGenres);
-//								psGenres.setString(2, cat);
-//								psGenres.addBatch();
+								psGenres.setInt(1, maxIDGenres);
+								psGenres.setString(2, cat);
+								psGenres.addBatch();
+								psGenres.executeBatch();
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
+								System.out.println(psGenres);
+								System.out.println(rsGenreExist.getString("id"));
 								
 								++maxIDGenres;
 							} else {
+								System.out.println(rsGenreExist.getString("id"));
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
 //								psGenres_in_Movies.setString(2, id);
 							}
@@ -243,20 +247,21 @@ public class importMovies {
 						ps.setString(4, dirName);
 						ps.addBatch();
 						maxID = id;
-						
 					}
 					rsmovieid.close();
 				}
 			}
-			ps.executeBatch();
-			PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
-			for (Integer key : gmap.keySet()) {
-				String val = gmap.get(key);
-				psGenres.setInt(1, key);
-				psGenres.setString(2, val);
-				psGenres.addBatch();
-			}
-			psGenres.executeBatch();
+			//ps.executeBatch();
+			//PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
+//			for (Integer key : gmap.keySet()) {
+//				String val = gmap.get(key);
+//				psGenres.setInt(1, key);
+//				psGenres.setString(2, val);
+//				psGenres.addBatch();
+//				System.out.println(psGenres);
+//			}
+			//System.out.println(psGenres);
+			//psGenres.executeBatch();
 			
 			//psGenres_in_Movies.executeBatch();
 			
