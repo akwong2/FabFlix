@@ -428,11 +428,11 @@ public class importMovies {
 	        			String starid2 = "NULL";
 	        			
 	        			Statement starStatement = dbcon.createStatement();
-	            		String querystar = "select id from moviedb.stars where name = '" +star+ "';";
+	            		String querystar = "select id from moviedb.stars where name = \"" +star+ "\";";
 	            		ResultSet rsquerystar = starStatement.executeQuery(querystar);
 	            		
 	            		Statement querymoviestatement = dbcon.createStatement();
-	            		String querymovie = "select id from moviedb.movies where title = '"+key+"';";
+	            		String querymovie = "select id from moviedb.movies where title = \""+key+"\";";
 	            		ResultSet rsquerymovie = querymoviestatement.executeQuery(querymovie);
 	            		
 	            		if (rsquerystar.next() && rsquerymovie.next()) {
