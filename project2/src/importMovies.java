@@ -121,15 +121,13 @@ public class importMovies {
 	        			}
 	        			if (actorInfo.item(b).getNodeName().equals("dob")) {
 	        				if (!actorInfo.item(b).getTextContent().isEmpty()) {
-	        					if (actorInfo.item(b).getTextContent().equals("n.a.")) {
-	        						dob = "NULL";
-	        					}
-	        					else if(actorInfo.item(b).getTextContent().equals("195x")) {
-	        						dob = "1950";
-	        					}
-	        					else {
+	        					
+	        					
+	        					if (actorInfo.item(b).getTextContent().matches("\\d+")) {
 	        						dob = actorInfo.item(b).getTextContent();
-	        					}		
+	        					}else {
+	        						dob = "NULL";
+	        					}	
 	        				}
 	        			}
 	        			
