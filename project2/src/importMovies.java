@@ -87,7 +87,7 @@ public class importMovies {
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 	        String sql = "insert into moviedb.movies (id, title,year,director) values (?,?,?,?)";
 	        String sqlGenres = "insert into moviedb.genres (id, name) values (?,?)";
-	        String sqlGenres_in_Movies = "insert into moviedb.genres (id, name) values (?,?)";
+	        String sqlGenres_in_Movies = "insert into moviedb.genres_in_movies (genreId, movieId) values (?,?)";
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
 	        PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
@@ -217,12 +217,12 @@ public class importMovies {
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
 								psGenres_in_Movies.setInt(1, maxIDGenres);
-								psGenres_in_Movies.setString(2, cat);
+								psGenres_in_Movies.setString(2, id);
 								
 								++maxIDGenres;
 							} else {
 								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
-								psGenres_in_Movies.setString(2, cat);
+								psGenres_in_Movies.setString(2, id);
 							}
 							psGenres_in_Movies.addBatch();
 						}
