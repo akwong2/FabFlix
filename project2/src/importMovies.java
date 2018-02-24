@@ -125,7 +125,6 @@ public class importMovies {
 	        			if (actorInfo.item(b).getNodeName().equals("dob")) {
 	        				if (!actorInfo.item(b).getTextContent().isEmpty()) {
 	        					
-	        					
 	        					if (actorInfo.item(b).getTextContent().matches("\\d+")) {
 	        						dob = actorInfo.item(b).getTextContent();
 	        					}else {
@@ -179,7 +178,7 @@ public class importMovies {
         	        statementStarExist.close();
         	        rsstarExist.close();     		
 	        		
-	        		System.out.println(psstar);
+//	        		System.out.println(psstar);
 //	        		System.out.println(sid);
 //	        		System.out.println(stagename);
 //	        		System.out.println(dob);
