@@ -133,52 +133,51 @@ public class importMovies {
 	        					}	
 	        				}
 	        			}
-	        			
-	        			Statement statementStarExist = dbcon.createStatement();
-	        	        String querystarExist = "select id from moviedb.stars where name = \""+stagename+"\";";
-	        	        ResultSet rsstarExist = statementStarExist.executeQuery(querystarExist);
-	        	        if (!rsstarExist.next()) {
-	    					char first = maxIDstar.charAt(0);
-	    					char second = maxIDstar.charAt(1);
-	    					String numS = maxIDstar.substring(2);
-	    					int num = Integer.parseInt(numS);
-	    					
-	    					if ( Integer.parseInt(numS)+1 == 10000000) {
-	    						numS = "0000000";
-	    						if (second == 'z') {
-	    							if (first == 'z')
-	    								first = 'a';
-	    							else
-	    								first++;
-	    							second = 'a';
-	    						} else {
-	    							second++;
-	    						}
-	    						String firstS = String.valueOf(first);
-	    						String secondS = String.valueOf(second);
-	    						sid = firstS + secondS + numS;
-	    					} else {
-	    						num = Integer.parseInt(numS) + 1;
-	    						String firstS = String.valueOf(first);
-	    						String secondS = String.valueOf(second);
-	    						sid = firstS + secondS + String.format("%07d", num);
-	    					}
-	        	        }
-	        	        statementStarExist.close();
-	        	        rsstarExist.close();
 	        		}
-	        		maxIDstar = sid;
-
-	        		psstar.setString(1, sid);
-				psstar.setString(2, stagename);
-				if (dob.equals("NULL")) {
-					psstar.setNull(3, 0);
-				}else {
-					psstar.setInt(3, Integer.parseInt(dob));
-				}
-				psstar.addBatch();
-
 	        		
+	        		Statement statementStarExist = dbcon.createStatement();
+        	        String querystarExist = "select id from moviedb.stars where name = \""+stagename+"\";";
+        	        ResultSet rsstarExist = statementStarExist.executeQuery(querystarExist);
+        	        if (!rsstarExist.next()) {
+    					char first = maxIDstar.charAt(0);
+    					char second = maxIDstar.charAt(1);
+    					String numS = maxIDstar.substring(2);
+    					int num = Integer.parseInt(numS);
+    					
+    					if ( Integer.parseInt(numS)+1 == 10000000) {
+    						numS = "0000000";
+    						if (second == 'z') {
+    							if (first == 'z')
+    								first = 'a';
+    							else
+    								first++;
+    							second = 'a';
+    						} else {
+    							second++;
+    						}
+    						String firstS = String.valueOf(first);
+    						String secondS = String.valueOf(second);
+    						sid = firstS + secondS + numS;
+    					} else {
+    						num = Integer.parseInt(numS) + 1;
+    						String firstS = String.valueOf(first);
+    						String secondS = String.valueOf(second);
+    						sid = firstS + secondS + String.format("%07d", num);
+    					}
+    					
+    					maxIDstar = sid;
+
+	    	        		psstar.setString(1, sid);
+	    				psstar.setString(2, stagename);
+	    				if (dob.equals("NULL")) {
+	    					psstar.setNull(3, 0);
+	    				}else {
+	    					psstar.setInt(3, Integer.parseInt(dob));
+	    				}
+	    				psstar.addBatch();
+        	        }
+        	        statementStarExist.close();
+        	        rsstarExist.close();     		
 	        		
 	        		System.out.println(psstar);
 //	        		System.out.println(sid);
