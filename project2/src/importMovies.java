@@ -91,8 +91,8 @@ public class importMovies {
 	        String sqlGenres_in_Movies = "insert into moviedb.genres_in_movies (genreId, movieId) values (?,?)";
 	        
 	        PreparedStatement ps = dbcon.prepareStatement(sql);
-	        //PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
 	        PreparedStatement psGenres_in_Movies = dbcon.prepareStatement(sqlGenres_in_Movies);
+	        
 	        // directorfilms
 	        
 	        Statement statement = dbcon.createStatement();
@@ -211,32 +211,32 @@ public class importMovies {
 							year = "1960";
 						}
 						year = year.substring(0, 4);
-				
-						
-						
-						
+
 						for (String cat : cats) {
 							PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
+//							PreparedStatement psGenres_in_Movies = dbcon.prepareStatement(sqlGenres_in_Movies);
 							Statement statementGenreExist = dbcon.createStatement();
 							String queryGenreExist = "select id from genres where name = '"+cat+"';";
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
 							if (!rsGenreExist.next()) {
 								++maxIDGenres;
-								gmap.put(maxIDGenres, cat);
 								psGenres.setInt(1, maxIDGenres);
 								cat = cat.replaceFirst("^\\s*", "");
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
 								psGenres.executeBatch();
+								psGenres_in_Movies.setInt(1, maxIDGenres);
+								psGenres_in_Movies.setString(2, id);
+								psGenres_in_Movies.addBatch();
+							} else {
+								psGenres_in_Movies.setInt(1, rsGenreExist.getInt("id"));
+								psGenres_in_Movies.setString(2, id);
+								psGenres_in_Movies.addBatch();
 							}
-							
 							psGenres.close();
 							statementGenreExist.close();
 							rsGenreExist.close();
 						}
-						
-						//psGenres.executeBatch();
-//						psGenres_in_Movies.executeBatch();
 						
 						ps.setString(1, id);
 						ps.setString(2, title);
@@ -249,24 +249,10 @@ public class importMovies {
 					rsgenresid.close();
 				}
 			}
+			
+			
+			psGenres_in_Movies.executeBatch();
 			ps.executeBatch();
-			
-//			PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
-//			
-//			for (Integer key : gmap.keySet()) {
-//				String val = gmap.get(key);
-//				psGenres.setInt(1, key);
-//				psGenres.setString(2, val);
-//				psGenres.addBatch();
-//				System.out.println(psGenres);
-//			}
-			//System.out.println(psGenres);
-			
-			//psGenres_in_Movies.executeBatch();
-			
-			
-	
-			//statementGenres.close();
 			statement.close();
 			psGenres_in_Movies.close();
 			ps.close();
