@@ -218,17 +218,18 @@ public class importMovies {
 							String queryGenreExist = "select id from genres where name = '"+cat+"';";
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
 							if (!rsGenreExist.next()) {
+								System.out.println(psGenres);
 								gmap.put(maxIDGenres, cat);
 								psGenres.setInt(1, maxIDGenres);
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
-								psGenres.executeBatch();
+								
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
-								System.out.println(psGenres);
-								System.out.println(rsGenreExist.getString("id"));
 								
+								System.out.println(rsGenreExist.getString("id"));
 								++maxIDGenres;
+								psGenres.executeBatch();
 							} else {
 								//System.out.println(rsGenreExist.getString("id"));
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
