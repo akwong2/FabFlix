@@ -236,6 +236,11 @@ public class importMovies {
 							}
 							//psGenres_in_Movies.addBatch();
 //							psGenres.executeBatch();
+							psGenres.close();
+							statementGenreExist.close();
+							rsGenreExist.close();
+							
+							
 						}
 						
 						//psGenres.executeBatch();
@@ -249,6 +254,7 @@ public class importMovies {
 						maxID = id;
 					}
 					rsmovieid.close();
+					rsgenresid.close();
 				}
 			}
 			//ps.executeBatch();
@@ -266,6 +272,12 @@ public class importMovies {
 			//psGenres_in_Movies.executeBatch();
 			
 			
+	
+			//statementGenres.close();
+			statement.close();
+			psGenres_in_Movies.close();
+			ps.close();
+			dbcon.close();
         }
         catch (SQLException ex) {
             while (ex != null) {
