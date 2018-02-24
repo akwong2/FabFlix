@@ -228,7 +228,7 @@ public class importMovies {
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
 //								psGenres_in_Movies.setString(2, id);
 							}
-							psGenres_in_Movies.addBatch();
+							//psGenres_in_Movies.addBatch();
 						}
 						
 						psGenres.executeBatch();
@@ -246,7 +246,7 @@ public class importMovies {
 				}
 			}
 			ps.executeBatch();
-			psGenres_in_Movies.executeBatch();
+			//psGenres_in_Movies.executeBatch();
 			
 			
         }
