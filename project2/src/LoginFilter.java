@@ -62,7 +62,8 @@ public class LoginFilter implements Filter {
 		if (requestURI.endsWith("LoginRevised.jsp") || requestURI.endsWith("Login.js") 
 				|| requestURI.endsWith("Login") || requestURI.endsWith("LoginRevised.css")
 				|| requestURI.endsWith("movie.jpg") || requestURI.endsWith("_dashboard.jsp")
-				|| requestURI.endsWith("_dashboard.js") || requestURI.endsWith("EmployeeLogin"))
+				|| requestURI.endsWith("_dashboard.js") || requestURI.endsWith("EmployeeLogin")
+				||requestURI.endsWith("performance.jsp"))
 		{
 			return true;
 		}
