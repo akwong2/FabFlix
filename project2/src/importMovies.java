@@ -27,6 +27,7 @@ public class importMovies {
 	//No generics
 //	List myEmpls;
 	Document dom;
+	Document dom2;
 
 
 	public importMovies(){
@@ -48,13 +49,18 @@ public class importMovies {
 		//get the factory
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
+		DocumentBuilderFactory dbf2 = DocumentBuilderFactory.newInstance();
+		
+		
 		try {
 			
 			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
+			DocumentBuilder db2 = dbf.newDocumentBuilder();
 			
 			//parse using builder to get DOM representation of the XML file
 			dom = db.parse("mains243.xml");
+			dom2 = db2.parse("actors63.xml");
 			
 
 		}catch(ParserConfigurationException pce) {
@@ -70,15 +76,17 @@ public class importMovies {
 	private void parseDocument(){
 		//get the root elememt
 		Element docEle = dom.getDocumentElement();
+		Element docEle2 = dom2.getDocumentElement();
 		
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
-//		String loginUser = "root";
-//		String loginPasswd = "2228848";
+		NodeList nl2 = docEle2.getElementsByTagName("actor");		
+		String loginUser = "root";
+		String loginPasswd = "2228848";
 		
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
+//		String loginUser = "mytestuser";
+//		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		
@@ -86,6 +94,89 @@ public class importMovies {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
+	        
+	        Statement statementStarId = dbcon.createStatement();
+	        String querystarid = "select max(id) from moviedb.stars";
+	        ResultSet rsstarid = statementStarId.executeQuery(querystarid);
+	        rsstarid.next();
+	        String maxIDstar = rsstarid.getString("max(id)");
+	        if (maxIDstar == null) {
+	        		maxIDstar = "aa0000000";
+	        }
+	        
+	        String sqlstar = "insert into moviedb.stars (id, name, birthYear) values (?,?,?)";
+	        PreparedStatement psstar = dbcon.prepareStatement(sqlstar);
+	        
+	        for (int a = 0; a < nl2.getLength();++a) {
+	        		NodeList actorInfo = nl2.item(a).getChildNodes();
+	        		
+	        		String sid = "";
+	        		String stagename = "NULL";
+	        		String dob = "NULL";
+	        		
+	        		
+	        		for (int b = 0; b<actorInfo.getLength(); ++b) {
+	        			if (actorInfo.item(b).getNodeName().equals("stagename")) {
+	        				stagename = actorInfo.item(b).getTextContent();
+	        			}
+	        			if (actorInfo.item(b).getNodeName().equals("dob")) {
+	        				if (!actorInfo.item(b).getTextContent().isEmpty()) 
+	        					dob = actorInfo.item(b).getTextContent();
+	        			}
+	        			
+	        			Statement statementStarExist = dbcon.createStatement();
+	        	        String querystarExist = "select id from stars where name = '"+stagename+"';";
+	        	        ResultSet rsstarExist = statementStarExist.executeQuery(querystarExist);
+	        	        if (!rsstarExist.next()) {
+	    					char first = maxIDstar.charAt(0);
+	    					char second = maxIDstar.charAt(1);
+	    					String numS = maxIDstar.substring(2);
+	    					int num = Integer.parseInt(numS);
+	    					
+	    					if ( Integer.parseInt(numS)+1 == 10000000) {
+	    						numS = "0000000";
+	    						if (second == 'z') {
+	    							if (first == 'z')
+	    								first = 'a';
+	    							else
+	    								first++;
+	    							second = 'a';
+	    						} else {
+	    							second++;
+	    						}
+	    						String firstS = String.valueOf(first);
+	    						String secondS = String.valueOf(second);
+	    						sid = firstS + secondS + numS;
+	    					} else {
+	    						num = Integer.parseInt(numS) + 1;
+	    						String firstS = String.valueOf(first);
+	    						String secondS = String.valueOf(second);
+	    						sid = firstS + secondS + String.format("%07d", num);
+	    					}
+	    					maxIDstar = sid;
+	    					psstar.setString(1, sid);
+	    					psstar.setString(2, stagename);
+	    					if (dob.equals("NULL")) {
+	    						psstar.setNull(3, 0);
+	    					}else {
+	    						psstar.setInt(3, Integer.parseInt(dob));
+	    					}
+	    					psstar.addBatch();
+	        	        }
+	        	        statementStarExist.close();
+	        	        rsstarExist.close();
+	        		}
+	        		
+	        		psstar.executeBatch();
+	        		psstar.close();
+	        		statementStarId.close();
+	        		rsstarid.close();
+	        		
+//	        		System.out.println(sid);
+//	        		System.out.println(stagename);
+//	        		System.out.println(dob);
+	        }
+    	        
 	        String sql = "insert into moviedb.movies (id, title,year,director) values (?,?,?,?)";
 	        String sqlGenres = "insert into moviedb.genres (id, name) values (?,?)";
 	        String sqlGenres_in_Movies = "insert into moviedb.genres_in_movies (genreId, movieId) values (?,?)";
@@ -116,10 +207,6 @@ public class importMovies {
 			} else {
 				maxIDGenres = Integer.parseInt(maxIDGenresStr);
 			}
-	        
-			HashMap <Integer, String> gmap = new HashMap <Integer, String>();
-			
-			HashMap <Integer, ArrayList<String>> ginmmap = new HashMap <Integer, ArrayList<String>>();
 			
 			for (int i=0;i<nl.getLength();++i) {
 				
@@ -226,7 +313,7 @@ public class importMovies {
 								cat = cat.replaceFirst("^\\s*", "");
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
-								psGenres.executeBatch();
+								//psGenres.executeBatch();
 								psGenres_in_Movies.setInt(1, maxIDGenres);
 								psGenres_in_Movies.setString(2, id);
 								psGenres_in_Movies.addBatch();
@@ -253,8 +340,8 @@ public class importMovies {
 			}
 			
 			
-			ps.executeBatch();
-			psGenres_in_Movies.executeBatch();
+			//ps.executeBatch();
+			//psGenres_in_Movies.executeBatch();
 			statement.close();
 			psGenres_in_Movies.close();
 			ps.close();
