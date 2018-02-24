@@ -53,15 +53,18 @@ public class importMovies {
 		DocumentBuilderFactory dbf3 = DocumentBuilderFactory.newInstance();
 		
 		
+		
 		try {
 			
 			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			DocumentBuilder db2 = dbf2.newDocumentBuilder();
+			DocumentBuilder db3 = dbf3.newDocumentBuilder();
 			
 			//parse using builder to get DOM representation of the XML file
 			dom = db.parse("mains243.xml");
 			dom2 = db2.parse("actors63.xml");
+			dom3 = db2.parse("casts124.xml");
 			
 
 		}catch(ParserConfigurationException pce) {
@@ -78,12 +81,17 @@ public class importMovies {
 		//get the root elememt
 		Element docEle = dom.getDocumentElement();
 		Element docEle2 = dom2.getDocumentElement();
+		Element docEle3 = dom3.getDocumentElement();
 		
 		//get a nodelist of <employee> elements
 		NodeList nl = docEle.getElementsByTagName("directorfilms");
 		
 		NodeList nl2 = docEle2.getElementsByTagName("actor");		
 		
+		NodeList nl3 = docEle3.getElementsByTagName("dirfilms");	
+		
+		
+//		
 //		String loginUser = "root";
 //		String loginPasswd = "2228848";
 		
@@ -97,6 +105,68 @@ public class importMovies {
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 	        
+	        
+	        HashMap<String, ArrayList<String>> starMoviesMap = new HashMap<String, ArrayList<String>>();
+	        
+	        
+	        for (int d = 0; d < nl3.getLength(); ++d) {
+	        		NodeList dirFilmInfo = nl3.item(d).getChildNodes();
+	        		for (int e = 0; e < dirFilmInfo.getLength();++e) {
+	        			if (dirFilmInfo.item(e).getNodeName().equals("filmc")) {
+	        				NodeList movieInfo = dirFilmInfo.item(e).getChildNodes();
+	        				String movieName ="";
+        					ArrayList<String> list = new ArrayList<String>();
+	        				for (int f = 0; f < movieInfo.getLength();++f) {  
+	        					for (int g = 0; g < movieInfo.item(f).getChildNodes().getLength();++g) {
+	        						if (movieInfo.item(f).getChildNodes().item(g).getNodeName().equals("t")) {
+	        							movieName = movieInfo.item(f).getChildNodes().item(g).getTextContent();
+	        						}
+	        						if (movieInfo.item(f).getChildNodes().item(g).getNodeName().equals("a")){
+	        							if (!movieInfo.item(f).getChildNodes().item(g).getTextContent().equals("s a"))
+	        								list.add(movieInfo.item(f).getChildNodes().item(g).getTextContent());
+	        						}
+	        					}
+	        					starMoviesMap.put(movieName, list);
+	        				}
+	        			}
+	        		}
+	        }
+	        
+	        
+//	        String sqlsinm = "insert into moviedb.stars_in_movies (starId,movieId ) values (?,?)";
+//	        PreparedStatement sinm = dbcon.prepareStatement(sqlsinm);
+//	        
+//	        for (String key : starMoviesMap.keySet()) {
+//        		ArrayList<String> value = starMoviesMap.get(key);
+//
+//	        		for (String star: value) {
+//	        			String starid2 = "NULL";
+//	        			
+//	        			Statement starStatement = dbcon.createStatement();
+//	            		String querystar = "select id from moviedb.stars where name = '" +star+ "';";
+//	            		ResultSet rsquerystar = starStatement.executeQuery(querystar);
+//	            		
+//	            		Statement querymoviestatement = dbcon.createStatement();
+//	            		String querymovie = "select id from moviedb.movies where title = '"+key+"';";
+//	            		ResultSet rsquerymovie = querymoviestatement.executeQuery(querymovie);
+//	            		
+//	            		if (rsquerystar.next() && rsquerymovie.next()) {
+//	            			String qs = rsquerystar.getString("id");
+//	            			String qm = rsquerymovie.getString("id");
+//	            			sinm.setString(1, qs);
+//	            			sinm.setString(2, qm);
+//	            			sinm.addBatch();
+//	            		}
+//	            		
+//	            		starStatement.close();
+//	            		rsquerystar.close();
+//	            		querymoviestatement.close();
+//	            		rsquerymovie.close();
+//	        		}
+//	        }
+//	        sinm.executeBatch();
+//	        sinm.close();
+	       
 	        Statement statementStarId = dbcon.createStatement();
 	        String querystarid = "select max(id) from moviedb.stars";
 	        ResultSet rsstarid = statementStarId.executeQuery(querystarid);
@@ -178,11 +248,6 @@ public class importMovies {
         	        }
         	        statementStarExist.close();
         	        rsstarExist.close();     		
-	        		
-//	        		System.out.println(psstar);
-//	        		System.out.println(sid);
-//	        		System.out.println(stagename);
-//	        		System.out.println(dob);
 	        }
 	        psstar.executeBatch();
 			psstar.close();
@@ -325,7 +390,7 @@ public class importMovies {
 								cat = cat.replaceFirst("^\\s*", "");
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
-								//psGenres.executeBatch();
+								psGenres.executeBatch();
 								psGenres_in_Movies.setInt(1, maxIDGenres);
 								psGenres_in_Movies.setString(2, id);
 								psGenres_in_Movies.addBatch();
@@ -351,9 +416,43 @@ public class importMovies {
 				}
 			}
 			
+			ps.executeBatch();
 			
-			//ps.executeBatch();
-			//psGenres_in_Movies.executeBatch();
+			String sqlsinm = "insert into moviedb.stars_in_movies (starId,movieId ) values (?,?)";
+	        PreparedStatement sinm = dbcon.prepareStatement(sqlsinm);
+	        
+	        for (String key : starMoviesMap.keySet()) {
+        		ArrayList<String> value = starMoviesMap.get(key);
+
+	        		for (String star: value) {
+	        			String starid2 = "NULL";
+	        			
+	        			Statement starStatement = dbcon.createStatement();
+	            		String querystar = "select id from moviedb.stars where name = '" +star+ "';";
+	            		ResultSet rsquerystar = starStatement.executeQuery(querystar);
+	            		
+	            		Statement querymoviestatement = dbcon.createStatement();
+	            		String querymovie = "select id from moviedb.movies where title = '"+key+"';";
+	            		ResultSet rsquerymovie = querymoviestatement.executeQuery(querymovie);
+	            		
+	            		if (rsquerystar.next() && rsquerymovie.next()) {
+	            			String qs = rsquerystar.getString("id");
+	            			String qm = rsquerymovie.getString("id");
+	            			sinm.setString(1, qs);
+	            			sinm.setString(2, qm);
+	            			sinm.addBatch();
+	            		}
+	            		
+	            		starStatement.close();
+	            		rsquerystar.close();
+	            		querymoviestatement.close();
+	            		rsquerymovie.close();
+	        		}
+	        }
+	        sinm.executeBatch();
+	        sinm.close();
+
+			psGenres_in_Movies.executeBatch();
 			statement.close();
 			psGenres_in_Movies.close();
 			ps.close();
