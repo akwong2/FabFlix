@@ -123,7 +123,11 @@ public class importMovies {
 	        				if (!actorInfo.item(b).getTextContent().isEmpty()) {
 	        					if (actorInfo.item(b).getTextContent().equals("n.a.")) {
 	        						dob = "NULL";
-	        					}else {
+	        					}
+	        					else if(actorInfo.item(b).getTextContent().equals("195x")) {
+	        						dob = "1950";
+	        					}
+	        					else {
 	        						dob = actorInfo.item(b).getTextContent();
 	        					}		
 	        				}
