@@ -132,7 +132,7 @@ public class importMovies {
 	        			}
 	        			
 	        			Statement statementStarExist = dbcon.createStatement();
-	        	        String querystarExist = "select id from stars where name = '"+stagename+"';";
+	        	        String querystarExist = "select id from stars where name = \""+stagename+"\";";
 	        	        ResultSet rsstarExist = statementStarExist.executeQuery(querystarExist);
 	        	        if (!rsstarExist.next()) {
 	    					char first = maxIDstar.charAt(0);
