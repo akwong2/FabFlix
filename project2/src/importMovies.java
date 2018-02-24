@@ -225,12 +225,12 @@ public class importMovies {
 								psGenres.executeBatch();
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
-								System.out.println(psGenres);
+								//System.out.println(psGenres);
 								System.out.println(rsGenreExist.getString("id"));
 								
 								++maxIDGenres;
 							} else {
-								System.out.println(rsGenreExist.getString("id"));
+								//System.out.println(rsGenreExist.getString("id"));
 //								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
 //								psGenres_in_Movies.setString(2, id);
 							}
