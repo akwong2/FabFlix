@@ -225,7 +225,7 @@ public class importMovies {
 								psGenres.executeBatch();
 //								psGenres_in_Movies.setInt(1, maxIDGenres);
 //								psGenres_in_Movies.setString(2, id);
-								//System.out.println(psGenres);
+								System.out.println(psGenres);
 								System.out.println(rsGenreExist.getString("id"));
 								
 								++maxIDGenres;
@@ -239,8 +239,6 @@ public class importMovies {
 							psGenres.close();
 							statementGenreExist.close();
 							rsGenreExist.close();
-							
-							
 						}
 						
 						//psGenres.executeBatch();
