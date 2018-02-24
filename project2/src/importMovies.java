@@ -193,6 +193,9 @@ public class importMovies {
 									if (filmInfo.item(l).getChildNodes().item(m).getNodeName().equals("cat"))
 										cats.add(filmInfo.item(l).getChildNodes().item(m).getTextContent());
 								}
+								if (cats.isEmpty()) {
+									cats.add("None");
+								}
 							}
 						}
 						if (year.equals("19yy")) {
@@ -214,7 +217,6 @@ public class importMovies {
 
 						for (String cat : cats) {
 							PreparedStatement psGenres = dbcon.prepareStatement(sqlGenres);
-//							PreparedStatement psGenres_in_Movies = dbcon.prepareStatement(sqlGenres_in_Movies);
 							Statement statementGenreExist = dbcon.createStatement();
 							String queryGenreExist = "select id from genres where name = '"+cat+"';";
 							ResultSet rsGenreExist = statementGenreExist.executeQuery(queryGenreExist);
