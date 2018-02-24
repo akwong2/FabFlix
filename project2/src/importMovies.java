@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.sql.ResultSet;
@@ -116,6 +117,7 @@ public class importMovies {
 				maxIDGenres = Integer.parseInt(maxIDGenresStr);
 			}
 	        
+			HashMap <Integer, ArrayList<String>> gmap = new HashMap <Integer, ArrayList<String>>();
 			
 			
 			for (int i=0;i<nl.getLength();++i) {
@@ -218,13 +220,13 @@ public class importMovies {
 								psGenres.setInt(1, maxIDGenres);
 								psGenres.setString(2, cat);
 								psGenres.addBatch();
-								psGenres_in_Movies.setInt(1, maxIDGenres);
-								psGenres_in_Movies.setString(2, id);
+//								psGenres_in_Movies.setInt(1, maxIDGenres);
+//								psGenres_in_Movies.setString(2, id);
 								
 								++maxIDGenres;
 							} else {
-								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
-								psGenres_in_Movies.setString(2, id);
+//								psGenres_in_Movies.setInt(1, rsGenreExist.getInt(id));
+//								psGenres_in_Movies.setString(2, id);
 							}
 							psGenres_in_Movies.addBatch();
 						}
