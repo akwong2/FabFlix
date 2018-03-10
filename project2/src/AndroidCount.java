@@ -7,7 +7,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,19 +16,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.lang.NumberFormatException;
 
 /**
- * Servlet implementation class MovieList
+ * Servlet implementation class AndroidCount
  */
-@WebServlet("/MovieListSearch")
-public class MovieListSearch extends HttpServlet {
+@WebServlet("/AndroidCount")
+public class AndroidCount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieListSearch() {
+    public AndroidCount() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,10 +35,10 @@ public class MovieListSearch extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NumberFormatException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		PrintWriter out = response.getWriter();
+		
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
 		
@@ -51,35 +49,31 @@ public class MovieListSearch extends HttpServlet {
 
 	        Connection dbcon = DriverManager.getConnection(loginUrl,loginUser, loginPasswd);
 			Statement statement = dbcon.createStatement();
-			String title = request.getParameter("Title");
-			String year = request.getParameter("Year");
-			String dir = request.getParameter("Director");
-			String star = request.getParameter("Name of Star");
-			
-			String query = "Select movies.id, movies.title,movies.year,movies.director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n"  
-					+ "from movies, stars_in_movies, stars, genres, genres_in_movies where \n" 
-					+ "stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n" 
-					+ "and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n" 
-					+  "and movies.id in\n"
-						+ "(Select movies.id\n"
-						+ "From movies, stars_in_movies, stars, genres, genres_in_movies\n"
-						+ "Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n"
-						+ "and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n"
-						+ "and upper(movies.title) like upper('%"+title+"%') and upper(movies.director) like upper('%"+dir+"%')\n"
-						+ "and upper(stars.name) like upper('%"+star+"%')\n";
-			if (!year.isEmpty()) {
-				try {
-					int i = Integer.parseInt(year);
-					System.out.println(i);
-					query = query + "and movies.year = "+Integer.parseInt(year)+"\n";
-				}
-				catch(NumberFormatException e) {
-					query = query + "and movies.year =-1\n";
+			String search = request.getParameter("id");
+			System.out.println(search);
+			search = search.replaceAll("[\\t\\n\\r]+","");			
+			String[] prefix = search.trim().split("\\s+");
+
+			String queryInner = "";
+			if (prefix.length>0) {
+				queryInner += "(select movies.id from movies where match (title) against ('"+prefix[0]+"*' in boolean mode)";
+				for (int i = 1; i < prefix.length; ++i) {
+					queryInner += "\nand match(title) against ('"+prefix[i]+"*' in boolean mode)";
 				}
 			}
-			query = query + "group by movies.id)\n"
-					+ "group by movies.id";
-			ResultSet rs = statement.executeQuery(query);		
+	
+			if (queryInner.equals("(select movies.id from movies where match (title) against ('*' in boolean mode)"))
+				queryInner = "(select movies.id from movies where match (title) against ('' in boolean mode)";
+			queryInner += ")";
+			String queryOuter = "Select movies.id, movies.title,movies.year,movies.director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n" + 
+					"from movies, stars_in_movies, stars, genres, genres_in_movies where \n" + 
+					"stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n" + 
+					"and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n" + 
+					"and movies.id in\n";
+			queryOuter += queryInner;
+			queryOuter += "\ngroup by movies.id";
+			
+			ResultSet rs = statement.executeQuery(queryOuter);		
 			
 			JsonArray jsonArray = new JsonArray();
 			
@@ -99,9 +93,9 @@ public class MovieListSearch extends HttpServlet {
 				responseJsonObject.addProperty("genresName", gN);
 				jsonArray.add(responseJsonObject);
 			}
-
-			out.write(jsonArray.toString());
-
+			int size = jsonArray.size();
+			
+			out.write(Integer.toString(size));
 			rs.close();
 	        statement.close();
 	        dbcon.close();

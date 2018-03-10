@@ -39,8 +39,9 @@ public class MainSuggestion extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		PrintWriter out = response.getWriter();
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+		
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
@@ -95,23 +96,9 @@ public class MainSuggestion extends HttpServlet {
 			}
 			
 			
-			String start =  request.getParameter("start");
 			
-			if (start.length()!=0) {
-				int s = Integer.parseInt(start);
-				if (jsonArray.size() > 10) {
-					JsonArray jsonArraySend = new JsonArray();
-					for (int i = s; i < (s+10); ++i) {
-						jsonArraySend.add(jsonArray.get(i));
-					}
-					out.write(jsonArraySend.toString());
-				}else {
-					out.write(jsonArray.toString());
-				}
-			}else {
-				out.write(jsonArray.toString());
-			}
-
+			out.write(jsonArray.toString());
+			
 			rs.close();
 	        statement.close();
 	        dbcon.close();

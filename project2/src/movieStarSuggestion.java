@@ -37,8 +37,8 @@ public class movieStarSuggestion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
 		

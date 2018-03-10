@@ -47,8 +47,8 @@ public class AndroidLogin extends HttpServlet {
 		String password = request.getParameter("password");
 		PrintWriter out = response.getWriter();
 		
-		String loginUser = "root";
-		String loginPasswd = "2228848";
+		String loginUser = "mytestuser";
+		String loginPasswd = "mypassword";
 		
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         

@@ -64,7 +64,7 @@ public class LoginFilter implements Filter {
 				|| requestURI.endsWith("movie.jpg") || requestURI.endsWith("_dashboard.jsp")
 				|| requestURI.endsWith("_dashboard.js") || requestURI.endsWith("EmployeeLogin")
 				|| requestURI.endsWith("performance.jsp") || requestURI.endsWith("MainSuggestion")
-				|| requestURI.endsWith("AndroidSearch"))
+				|| requestURI.endsWith("AndroidSearch") || requestURI.endsWith("AndroidCount"))
 		{
 			return true;
 		}
