@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,12 +55,18 @@ public class MovieListSearch extends HttpServlet {
 			String year = request.getParameter("Year");
 			String dir = request.getParameter("Director");
 			String star = request.getParameter("Name of Star");
-			String query = "Select movies.id, title,year,director,group_concat(distinct stars.name), group_concat(distinct genres.name)\n"
-					+ "From movies, stars_in_movies, stars, genres, genres_in_movies\n"
-					+ "Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n"
-					+ "and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n"
-					+ "and upper(movies.title) like upper('%"+title+"%') and upper(movies.director) like upper('%"+dir+"%')\n"
-					+ "and upper(stars.name) like upper('%"+star+"%')\n";
+			
+			String query = "Select movies.id, movies.title,movies.year,movies.director,group_concat(distinct stars.name), group_concat(distinct genres.name) \n"  
+					+ "from movies, stars_in_movies, stars, genres, genres_in_movies where \n" 
+					+ "stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n" 
+					+ "and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n" 
+					+  "and movies.id in\n"
+						+ "(Select movies.id\n"
+						+ "From movies, stars_in_movies, stars, genres, genres_in_movies\n"
+						+ "Where stars_in_movies.movieId = movies.id and stars_in_movies.starId = stars.id\n"
+						+ "and genres.id = genres_in_movies.genreId and genres_in_movies.movieId = movies.id\n"
+						+ "and upper(movies.title) like upper('%"+title+"%') and upper(movies.director) like upper('%"+dir+"%')\n"
+						+ "and upper(stars.name) like upper('%"+star+"%')\n";
 			if (!year.isEmpty()) {
 				try {
 					int i = Integer.parseInt(year);
@@ -70,8 +77,10 @@ public class MovieListSearch extends HttpServlet {
 					query = query + "and movies.year =-1\n";
 				}
 			}
-			query = query + "group by movies.id,movies.title,movies.year,movies.director";
-			ResultSet rs = statement.executeQuery(query);
+			query = query + "group by movies.id)\n"
+					+ "group by movies.id";
+			ResultSet rs = statement.executeQuery(query);		
+			
 			JsonArray jsonArray = new JsonArray();
 			
 			while (rs.next()) {
@@ -92,24 +101,7 @@ public class MovieListSearch extends HttpServlet {
 			}
 
 			out.write(jsonArray.toString());
-				
-	//				request.getSession().setAttribute("user", new User(email));
-	//				
-	//				JsonObject responseJsonObject = new JsonObject();
-	//				responseJsonObject.addProperty("status", "success");
-	//				responseJsonObject.addProperty("message", "success");
-	//				response.getWriter().write(responseJsonObject.toString());
-				// else
-	//				request.getSession().setAttribute("user", new User(email));
-	//				
-	//				JsonObject responseJsonObject = new JsonObject();
-	//				responseJsonObject.addProperty("status", "fail");
-	//				
-	//				responseJsonObject.addProperty("message", "Invalid Email or Password");
-	//				
-	//				response.getWriter().write(responseJsonObject.toString());
 
-			
 			rs.close();
 	        statement.close();
 	        dbcon.close();

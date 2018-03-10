@@ -112,6 +112,7 @@ function handleCart(resultDataString){
 }
 
 function starClick(n){
+	alert(n);
 	window.location.replace("/project2/SingleStar.jsp?id="+n);
 }
 
@@ -133,7 +134,9 @@ function sortByTitle(){
 		title = title -1;
 	}
 	state = 0;
-	handleSearch(RD, title);
+	if (RD != null){
+		handleSearch(RD, title);
+	}
 }
 
 function sortByYear(){
@@ -146,7 +149,9 @@ function sortByYear(){
 		year = year -1;
 	}
 	state = 1;
-	handleSearch(RD, year);
+	if (RD != null){
+		handleSearch(RD, title);
+	}
 }
 
 var offset = 0;
